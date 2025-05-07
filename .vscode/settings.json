@@ -16,4 +16,6 @@
         "/src/Types",
         "/src/Errors"
     ],
+    "exportall.config.barrelName": "mod.ts",
+    "exportall.config.message": "deno-coverage-ignore-file",
 }
