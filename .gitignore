@@ -3,3 +3,5 @@ coverage/
 logs/
 .locale/
 cache/
+out.py
+output.txt
