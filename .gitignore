@@ -5,3 +5,4 @@ logs/
 cache/
 out.py
 output.txt
+git_log_diff.txt
