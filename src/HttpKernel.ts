@@ -20,26 +20,37 @@ import { RouteBuilder } from './RouteBuilder.ts';
 import { createEmptyContext, normalizeError } from './Utils/mod.ts';
 
 /**
- * The central HTTP kernel responsible for managing route definitions,
- * executing middleware chains, and dispatching HTTP requests to their handlers.
+ * The `HttpKernel` is the central routing engine that manages the full HTTP request lifecycle.
  *
- * This class supports a fluent API for route registration and allows the injection
- * of custom response decorators and route builder factories for maximum flexibility and testability.
+ * It enables:
+ * - Dynamic and static route registration via a fluent API
+ * - Execution of typed middleware chains and final route handlers
+ * - Injection of response decorators and factory overrides
+ * - Fine-grained error handling via typed status-code-based handlers
+ *
+ * The kernel is designed with generics for flexible context typing, strong type safety,
+ * and a clear extension point for advanced routing, DI, or tracing logic.
+ *
+ * @typeParam TContext - The global context type used for all requests handled by this kernel.
  */
 export class HttpKernel<TContext extends IContext = IContext>
     implements IHttpKernel<TContext> {
     private cfg: IHttpKernelConfig<TContext>;
+
     /**
-     * The list of internally registered routes, each with method, matcher, middleware, and handler.
+     * The list of registered route definitions, including method, matcher,
+     * middleware pipeline, and final handler.
      */
     private routes: IInternalRoute<TContext>[] = [];
 
     /**
-     * Creates a new instance of the `HttpKernel`.
+     * Initializes the `HttpKernel` with optional configuration overrides.
      *
-     * @param decorateResponse - An optional response decorator function that is applied to all responses
-     *                           after the middleware/handler pipeline. Defaults to identity (no modification).
-     * @param routeBuilderFactory - Optional factory for creating route builders. Defaults to using `RouteBuilder`.
+     * Default components such as the route builder factory, response decorator,
+     * and 404/500 error handlers can be replaced by injecting a partial config.
+     * Any omitted values fall back to sensible defaults.
+     *
+     * @param config - Partial kernel configuration. Missing fields are filled with defaults.
      */
     public constructor(
         config?: DeepPartial<IHttpKernelConfig<TContext>>,
@@ -82,9 +93,8 @@ export class HttpKernel<TContext extends IContext = IContext>
 
     /**
      * @inheritdoc
-     */ public async handle(
-        request: Request,
-    ): Promise<Response> {
+     */
+    public async handle(request: Request): Promise<Response> {
         const url = new URL(request.url);
         const method = request.method.toUpperCase();
 
@@ -112,11 +122,12 @@ export class HttpKernel<TContext extends IContext = IContext>
     }
 
     /**
-     * Registers a finalized route by pushing it into the internal route list.
+     * Finalizes and registers a route within the kernel.
      *
-     * This method is typically called by the route builder after `.handle()` is invoked.
+     * This method is invoked internally by the route builder once
+     * `.handle()` is called. It appends the route to the internal list.
      *
-     * @param route - The fully constructed route including matcher, middlewares, and handler.
+     * @param route - A fully constructed internal route object.
      */
     private registerRoute<_TContext extends IContext = TContext>(
         route: IInternalRoute<_TContext>,
@@ -125,24 +136,18 @@ export class HttpKernel<TContext extends IContext = IContext>
     }
 
     /**
-     * Executes the complete request pipeline: middleware chain, final handler, and optional response decoration.
+     * Executes the middleware and handler pipeline for a matched route.
      *
-     * Middleware functions are invoked sequentially in the order of registration. Each middleware
-     * receives a `next()` callback to advance to the next stage. If a middleware returns a `Response`
-     * directly, the pipeline short-circuits.
+     * This function:
+     * - Enforces linear middleware execution with `next()` tracking
+     * - Validates middleware and handler types at runtime
+     * - Applies the optional response decorator post-processing
+     * - Handles all runtime errors via the configured 500 handler
      *
-     * After the final handler produces a response, it is passed through the configured response decorator,
-     * which may modify it (e.g., adding headers or logging metadata).
-     *
-     * Internal error handling ensures:
-     * - That `next()` is not called multiple times.
-     * - That all middleware and handlers are properly typed.
-     * - That thrown exceptions are routed to the 500-error handler.
-     *
-     * @param ctx - The current request context, including request data and shared state.
-     * @param middleware - An ordered list of middleware functions to invoke.
-     * @param handler - The terminal request handler to produce the response.
-     * @returns The final decorated `Response` object.
+     * @param ctx - The active request context passed to middleware and handler.
+     * @param middleware - Ordered middleware functions for this route.
+     * @param handler - The final handler responsible for generating a response.
+     * @returns The final HTTP `Response`, possibly decorated.
      */
     private async executePipeline(
         ctx: TContext,
@@ -158,7 +163,6 @@ export class HttpKernel<TContext extends IContext = IContext>
         let lastIndex = -1;
 
         const dispatch = async (currentIndex: number): Promise<Response> => {
-            // Prevent middleware from invoking next() multiple times
             if (currentIndex <= lastIndex) {
                 throw new Error('Middleware called `next()` multiple times');
             }

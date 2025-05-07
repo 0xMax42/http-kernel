@@ -3,48 +3,47 @@ import { IRouteBuilder } from './IRouteBuilder.ts';
 import { IRouteDefinition } from './IRouteDefinition.ts';
 
 /**
- * Defines the core interface for an HTTP kernel instance, responsible for
- * registering routes, orchestrating middleware pipelines, and dispatching
- * incoming HTTP requests to the appropriate handler.
+ * The `IHttpKernel` interface defines the public API for a type-safe, middleware-driven HTTP dispatching system.
  *
- * The kernel operates on a generic `IContext` type, which encapsulates the
- * request, typed state, route parameters, and query parameters for each request.
+ * Implementations of this interface are responsible for:
+ * - Registering routes with optional per-route context typing
+ * - Handling incoming requests by matching and dispatching to appropriate handlers
+ * - Managing the complete middleware pipeline and final response generation
  *
- * @template TContext The default context type for all registered routes and handlers.
+ * The kernel operates on a customizable `IContext` type to support strongly typed request parameters, state,
+ * and query values across the entire routing lifecycle.
+ *
+ * @typeParam TContext - The default context type used for all routes unless overridden per-route.
  */
 export interface IHttpKernel<TContext extends IContext = IContext> {
     /**
-     * Registers a new route using a static path or custom matcher.
+     * Registers a new HTTP route (static or dynamic) and returns a route builder for middleware/handler chaining.
      *
-     * Returns a route builder that allows chaining middleware and assigning a final handler.
-     * This method is context-generic, allowing temporary overrides for specific routes
-     * if their context differs from the kernel-wide default.
+     * This method supports contextual polymorphism via the `_TContext` type parameter, enabling fine-grained
+     * typing of route-specific `params`, `query`, and `state` values. The route is not registered until
+     * `.handle()` is called on the returned builder.
      *
-     * @template _TContext Optional context override for the specific route being registered.
-     *                     Defaults to the kernel's generic `TContext`.
+     * @typeParam _TContext - An optional override for the context type specific to this route.
+     *                        Falls back to the global `TContext` of the kernel if omitted.
      *
-     * @param definition - A route definition containing the HTTP method and either a path
-     *                     pattern (e.g., `/users/:id`) or a custom matcher function.
-     * @returns A fluent builder interface for attaching middleware and setting the handler.
+     * @param definition - A route definition specifying the HTTP method and path or custom matcher.
+     * @returns A fluent builder interface to define middleware and attach a final handler.
      */
     route<_TContext extends IContext = TContext>(
         definition: IRouteDefinition,
-    ): IRouteBuilder; // IRouteBuilder<_TContext>
+    ): IRouteBuilder<_TContext>;
 
     /**
-     * Handles an incoming HTTP request by matching it to a route, executing its middleware,
-     * and invoking the final handler. Automatically populates route parameters (`ctx.params`),
-     * query parameters (`ctx.query`), and initializes an empty mutable state (`ctx.state`).
+     * Handles an incoming HTTP request and produces a `Response`.
      *
-     * This method is typically passed directly to `Deno.serve()` as the request handler.
+     * The kernel matches the request against all registered routes by method and matcher,
+     * constructs a typed context, and executes the middleware/handler pipeline.
+     * If no route matches, a 404 error handler is invoked.
      *
-     * @template _TContext Optional override for the context type of the current request.
-     *                     Useful for testing or simulated requests. Defaults to the kernel’s `TContext`.
+     * This method is designed to be passed directly to `Deno.serve()` or similar server frameworks.
      *
-     * @param request - The incoming HTTP request to dispatch.
-     * @returns A promise resolving to the final HTTP response.
+     * @param request - The incoming HTTP request object.
+     * @returns A `Promise` resolving to a complete HTTP response.
      */
-    handle(
-        request: Request,
-    ): Promise<Response>;
+    handle(request: Request): Promise<Response>;
 }
