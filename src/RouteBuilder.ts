@@ -1,12 +1,13 @@
 import { IRouteMatcherFactory } from './Interfaces/IRouteMatcher.ts';
 import {
+    IContext,
     IHandler,
-    IInternalRoute,
     IMiddleware,
     IRouteBuilder,
     IRouteDefinition,
 } from './Interfaces/mod.ts';
-import { createRouteMatcher } from './Utils.ts';
+import { RegisterRoute } from './Types/mod.ts';
+import { createRouteMatcher } from './Utils/createRouteMatcher.ts';
 
 /**
  * Provides a fluent builder interface for defining a single route,
@@ -14,7 +15,8 @@ import { createRouteMatcher } from './Utils.ts';
  *
  * This builder is stateless and immutable; each chained call returns a new instance.
  */
-export class RouteBuilder implements IRouteBuilder {
+export class RouteBuilder<TContext extends IContext = IContext>
+    implements IRouteBuilder<TContext> {
     /**
      * Constructs a new instance of the route builder.
      *
@@ -23,9 +25,9 @@ export class RouteBuilder implements IRouteBuilder {
      * @param mws - The list of middleware functions collected so far (default: empty).
      */
     constructor(
-        private readonly registerRoute: (route: IInternalRoute) => void,
+        private readonly registerRoute: RegisterRoute<TContext>,
         private readonly def: IRouteDefinition,
-        private readonly mws: IMiddleware[] = [],
+        private readonly mws: IMiddleware<TContext>[] = [],
         private readonly matcherFactory: IRouteMatcherFactory =
             createRouteMatcher,
     ) {}
@@ -39,11 +41,14 @@ export class RouteBuilder implements IRouteBuilder {
      * @param mw - A middleware function to be executed before the handler.
      * @returns A new `RouteBuilder` instance for continued chaining.
      */
-    middleware(mw: IMiddleware): IRouteBuilder {
-        return new RouteBuilder(this.registerRoute, this.def, [
-            ...this.mws,
-            mw,
-        ]);
+    middleware<_TContext extends IContext = TContext>(
+        mw: IMiddleware<_TContext>,
+    ): IRouteBuilder<_TContext> {
+        return new RouteBuilder<_TContext>(
+            this.registerRoute as unknown as RegisterRoute<_TContext>,
+            this.def,
+            [...this.mws as unknown as IMiddleware<_TContext>[], mw],
+        );
     }
 
     /**
@@ -54,13 +59,15 @@ export class RouteBuilder implements IRouteBuilder {
      *
      * @param handler - The final request handler for this route.
      */
-    handle(handler: IHandler): void {
+    handle<_TContext extends IContext = TContext>(
+        handler: IHandler<_TContext>,
+    ): void {
         const matcher = this.matcherFactory(this.def);
         this.registerRoute({
-            method: this.def.method.toUpperCase(),
+            method: this.def.method,
             matcher,
             middlewares: this.mws,
-            handler,
+            handler: handler as unknown as IHandler<TContext>,
         });
     }
 }

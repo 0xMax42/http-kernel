@@ -7,9 +7,10 @@ import {
     IRouteBuilder,
     IRouteBuilderFactory,
     IRouteDefinition,
-    ResponseDecorator,
 } from './Interfaces/mod.ts';
 import { RouteBuilder } from './RouteBuilder.ts';
+import { ResponseDecorator } from './Types/mod.ts';
+import { parseQuery } from './Utils/mod.ts';
 
 /**
  * The central HTTP kernel responsible for managing route definitions,
@@ -18,7 +19,8 @@ import { RouteBuilder } from './RouteBuilder.ts';
  * This class supports a fluent API for route registration and allows the injection
  * of custom response decorators and route builder factories for maximum flexibility and testability.
  */
-export class HttpKernel implements IHttpKernel {
+export class HttpKernel<TContext extends IContext = IContext>
+    implements IHttpKernel<TContext> {
     /**
      * The list of internally registered routes, each with method, matcher, middleware, and handler.
      */
@@ -35,12 +37,16 @@ export class HttpKernel implements IHttpKernel {
         private readonly decorateResponse: ResponseDecorator = (res) => res,
         private readonly routeBuilderFactory: IRouteBuilderFactory =
             RouteBuilder,
-    ) {}
+    ) {
+        this.handle = this.handle.bind(this);
+    }
 
     /**
      * @inheritdoc
      */
-    public route(definition: IRouteDefinition): IRouteBuilder {
+    public route<_TContext extends IContext = TContext>(
+        definition: IRouteDefinition,
+    ): IRouteBuilder {
         return new this.routeBuilderFactory(
             this.registerRoute.bind(this),
             definition,
@@ -49,8 +55,9 @@ export class HttpKernel implements IHttpKernel {
 
     /**
      * @inheritdoc
-     */
-    public handle = async (request: Request): Promise<Response> => {
+     */ public async handle<_TContext extends IContext = TContext>(
+        request: Request,
+    ): Promise<Response> {
         const url = new URL(request.url);
         const method = request.method.toUpperCase();
 
@@ -58,11 +65,12 @@ export class HttpKernel implements IHttpKernel {
             if (route.method !== method) continue;
             const match = route.matcher(url, request);
             if (match) {
-                const ctx: IContext = {
+                const ctx: _TContext = {
                     req: request,
                     params: match.params,
+                    query: parseQuery(url.searchParams),
                     state: {},
-                };
+                } as _TContext;
                 return await this.executePipeline(
                     ctx,
                     route.middlewares,
@@ -72,7 +80,7 @@ export class HttpKernel implements IHttpKernel {
         }
 
         return new Response('Not Found', { status: 404 });
-    };
+    }
 
     /**
      * Registers a finalized route by pushing it into the internal route list.

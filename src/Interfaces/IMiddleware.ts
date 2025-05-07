@@ -3,18 +3,23 @@ import { IContext } from './IContext.ts';
 /**
  * Represents a middleware function in the HTTP request pipeline.
  *
- * Middleware can perform tasks such as logging, authentication, validation,
- * or response transformation. It receives the current request context and
- * a `next()` function to delegate control to the next middleware or final handler.
+ * Middleware is a core mechanism to intercept, observe, or modify the request lifecycle.
+ * It can be used for tasks such as logging, authentication, input validation,
+ * metrics collection, or response transformation.
  *
- * To stop the request pipeline, a middleware can return a `Response` directly
- * without calling `next()`.
+ * Each middleware receives a fully-typed request context and a `next()` function
+ * to invoke the next stage of the pipeline. Middleware may choose to short-circuit
+ * the pipeline by returning a `Response` early.
+ *
+ * @template TContext The specific context type for this middleware, including state, params, and query information.
  */
-export interface IMiddleware {
+export interface IMiddleware<TContext extends IContext = IContext> {
     /**
-     * @param ctx - The request context, containing the request, path parameters, and shared state.
-     * @param next - A function that continues the middleware pipeline. Returns the final `Response`.
-     * @returns A promise resolving to an HTTP `Response`.
+     * Handles the request processing at this middleware stage.
+     *
+     * @param ctx - The full request context, containing request, params, query, and typed state.
+     * @param next - A continuation function that executes the next middleware or handler in the pipeline.
+     * @returns A `Promise` resolving to an HTTP `Response`, either from this middleware or downstream.
      */
-    (ctx: IContext, next: () => Promise<Response>): Promise<Response>;
+    (ctx: TContext, next: () => Promise<Response>): Promise<Response>;
 }

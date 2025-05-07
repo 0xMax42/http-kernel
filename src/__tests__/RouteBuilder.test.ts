@@ -15,7 +15,7 @@ import { RouteBuilder } from '../mod.ts';
 // Dummy objects
 const dummyHandler: IHandler = async () => new Response('ok');
 const dummyMiddleware: IMiddleware = async (_, next) => await next();
-const dummyDef: IRouteDefinition = { method: 'get', path: '/hello' };
+const dummyDef: IRouteDefinition = { method: 'GET', path: '/hello' };
 const dummyMatcher = () => ({ params: {} });
 
 Deno.test('middleware: single middleware is registered correctly', () => {
@@ -57,7 +57,7 @@ Deno.test('middleware: preserves order of middleware', () => {
 Deno.test('handle: uppercases method', () => {
     let result: IInternalRoute | null = null as IInternalRoute | null;
 
-    new RouteBuilder((r) => result = r, { method: 'post', path: '/x' })
+    new RouteBuilder((r) => result = r, { method: 'POST', path: '/x' })
         .handle(dummyHandler);
 
     assertEquals(result?.method, 'POST');
@@ -74,8 +74,18 @@ Deno.test('handle: works with no middleware', async () => {
 
     const request = new Request('http://localhost');
 
-    const res1 = await route?.handler({ req: request, params: {}, state: {} });
-    const res2 = await dummyHandler({ req: request, params: {}, state: {} });
+    const res1 = await route?.handler({
+        req: request,
+        params: {},
+        state: {},
+        query: {},
+    });
+    const res2 = await dummyHandler({
+        req: request,
+        params: {},
+        state: {},
+        query: {},
+    });
 
     assertEquals(res1?.status, res2?.status);
     assertEquals(await res1?.text(), await res2?.text());

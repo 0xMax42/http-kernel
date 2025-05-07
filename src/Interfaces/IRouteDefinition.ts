@@ -1,3 +1,4 @@
+import { HttpMethod } from '../Types/mod.ts';
 import { IRouteMatcher } from './IRouteMatcher.ts';
 
 /**
@@ -10,7 +11,7 @@ export interface IStaticRouteDefinition {
     /**
      * The HTTP method this route should match (e.g. "GET", "POST").
      */
-    method: string;
+    method: HttpMethod;
 
     /**
      * A static path pattern for the route, which may include named parameters
@@ -29,7 +30,7 @@ export interface IDynamicRouteDefinition {
     /**
      * The HTTP method this route should match (e.g. "GET", "POST").
      */
-    method: string;
+    method: HttpMethod;
 
     /**
      * A custom matcher function that receives the parsed URL and raw request.

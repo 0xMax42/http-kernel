@@ -2,6 +2,7 @@ import { IHandler } from './IHandler.ts';
 import { IInternalRoute } from './IInternalRoute.ts';
 import { IMiddleware } from './IMiddleware.ts';
 import { IRouteDefinition } from './IRouteDefinition.ts';
+import { IContext } from './mod.ts';
 
 export interface IRouteBuilderFactory {
     new (
@@ -15,7 +16,7 @@ export interface IRouteBuilderFactory {
  * Provides a fluent API to build a single route configuration by chaining
  * middleware and setting the final request handler.
  */
-export interface IRouteBuilder {
+export interface IRouteBuilder<TContext extends IContext = IContext> {
     /**
      * Adds a middleware to the current route.
      * Middleware will be executed in the order of registration.
@@ -23,7 +24,9 @@ export interface IRouteBuilder {
      * @param mw - A middleware function.
      * @returns The route builder for further chaining.
      */
-    middleware(mw: IMiddleware): IRouteBuilder;
+    middleware<_TContext extends IContext = TContext>(
+        mw: IMiddleware<_TContext>,
+    ): IRouteBuilder<_TContext>;
 
     /**
      * Sets the final request handler for the route.
@@ -31,5 +34,7 @@ export interface IRouteBuilder {
      *
      * @param handler - The function to execute when this route is matched.
      */
-    handle(handler: IHandler): void;
+    handle<_TContext extends IContext = TContext>(
+        handler: IHandler<_TContext>,
+    ): void;
 }

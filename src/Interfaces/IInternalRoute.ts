@@ -1,5 +1,7 @@
+import { HttpMethod } from '../Types/mod.ts';
 import { IHandler } from './IHandler.ts';
 import { IMiddleware } from './IMiddleware.ts';
+import { IContext } from './mod.ts';
 
 /**
  * Represents an internally registered route within the HttpKernel.
@@ -7,12 +9,12 @@ import { IMiddleware } from './IMiddleware.ts';
  * Contains all data required to match an incoming request and dispatch it
  * through the associated middleware chain and final handler.
  */
-export interface IInternalRoute {
+export interface IInternalRoute<TContext extends IContext = IContext> {
     /**
      * The HTTP method (e.g. 'GET', 'POST') that this route responds to.
      * The method should always be in uppercase.
      */
-    method: string;
+    method: HttpMethod;
 
     /**
      * A matcher function used to determine whether this route matches a given request.
@@ -33,10 +35,10 @@ export interface IInternalRoute {
     /**
      * An ordered list of middleware functions to be executed before the handler.
      */
-    middlewares: IMiddleware[];
+    middlewares: IMiddleware<TContext>[];
 
     /**
      * The final handler that generates the HTTP response after all middleware has run.
      */
-    handler: IHandler;
+    handler: IHandler<TContext>;
 }

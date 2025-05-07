@@ -1,4 +1,4 @@
-import { IRouteDefinition, IRouteMatcher } from './Interfaces/mod.ts';
+import { IRouteDefinition, IRouteMatcher } from '../Interfaces/mod.ts';
 
 /**
  * Creates a matcher function from a given route definition.

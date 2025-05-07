@@ -1,11 +1,22 @@
+import { Params, Query, State } from '../Types/mod.ts';
+
 /**
- * Represents the per-request context passed through the middleware pipeline and to the final handler.
+ * Represents the complete context for a single HTTP request,
+ * passed through the middleware pipeline and to the final route handler.
  *
- * This context object encapsulates the original HTTP request,
- * the path parameters extracted from the matched route,
- * and a mutable state object for sharing information across middlewares and handlers.
+ * This context object encapsulates all relevant runtime data for a request,
+ * including the original request, path parameters, query parameters,
+ * and a shared, mutable application state.
+ *
+ * @template TState  Structured per-request state shared across middlewares and handlers.
+ * @template TParams Parsed URL path parameters, typically derived from route templates.
+ * @template TQuery  Parsed query string parameters, preserving multi-value semantics.
  */
-export interface IContext {
+export interface IContext<
+    TState extends State = State,
+    TParams extends Params = Params,
+    TQuery extends Query = Query,
+> {
     /**
      * The original HTTP request object as received by Deno.
      * Contains all standard fields like headers, method, body, etc.
@@ -18,14 +29,25 @@ export interface IContext {
      *
      * These parameters are considered read-only and are set by the router.
      */
-    params: Record<string, string>;
+    params: TParams;
 
     /**
-     * A shared, mutable object used to pass arbitrary data between middlewares and handlers.
+     * Query parameters extracted from the request URL's search string.
      *
-     * Use this field to attach validated user info, auth state, logging context, etc.
+     * Values may occur multiple times (e.g., `?tag=ts&tag=deno`), and are therefore
+     * represented as either a string or an array of strings, depending on occurrence.
      *
-     * Each key should be well-named to avoid collisions across layers.
+     * Use this field to access filters, flags, pagination info, or similar modifiers.
      */
-    state: Record<string, unknown>;
+    query: TQuery;
+
+    /**
+     * A typed, mutable object used to pass structured data between middlewares and handlers.
+     *
+     * This object is ideal for sharing validated input, user identity, trace information,
+     * or other contextual state throughout the request lifecycle.
+     *
+     * Type-safe access to fields is ensured by the generic `TState` type.
+     */
+    state: TState;
 }
