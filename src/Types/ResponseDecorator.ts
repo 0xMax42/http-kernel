@@ -1,3 +1,5 @@
+import { IContext } from '../Interfaces/mod.ts';
+
 /**
  * A function that modifies or enriches an outgoing HTTP response before it is returned to the client.
  *
@@ -22,4 +24,7 @@
  * };
  * ```
  */
-export type ResponseDecorator = (res: Response) => Response;
+export type ResponseDecorator<TContext extends IContext = IContext> = (
+    res: Response,
+    ctx: TContext,
+) => Response;

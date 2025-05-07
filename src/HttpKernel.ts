@@ -24,7 +24,7 @@ export class HttpKernel<TContext extends IContext = IContext>
     /**
      * The list of internally registered routes, each with method, matcher, middleware, and handler.
      */
-    private routes: IInternalRoute[] = [];
+    private routes: IInternalRoute<TContext>[] = [];
 
     /**
      * Creates a new instance of the `HttpKernel`.
@@ -71,10 +71,10 @@ export class HttpKernel<TContext extends IContext = IContext>
                     query: parseQuery(url.searchParams),
                     state: {},
                 } as _TContext;
-                return await this.executePipeline(
+                return await this.executePipeline<_TContext>(
                     ctx,
-                    route.middlewares,
-                    route.handler,
+                    route.middlewares as unknown as IMiddleware<_TContext>[],
+                    route.handler as unknown as IHandler<_TContext>,
                 );
             }
         }
@@ -89,8 +89,10 @@ export class HttpKernel<TContext extends IContext = IContext>
      *
      * @param route - The fully constructed route including matcher, middlewares, and handler.
      */
-    private registerRoute(route: IInternalRoute): void {
-        this.routes.push(route);
+    private registerRoute<_TContext extends IContext = TContext>(
+        route: IInternalRoute<_TContext>,
+    ): void {
+        this.routes.push(route as unknown as IInternalRoute<TContext>);
     }
 
     /**
@@ -107,23 +109,22 @@ export class HttpKernel<TContext extends IContext = IContext>
      * @param handler - The final request handler to invoke at the end of the pipeline.
      * @returns The final HTTP response after middleware and decoration.
      */
-    private async executePipeline(
-        ctx: IContext,
-        middleware: IMiddleware[],
-        handler: IHandler,
+    private async executePipeline<_TContext extends IContext = TContext>(
+        ctx: _TContext,
+        middleware: IMiddleware<_TContext>[],
+        handler: IHandler<_TContext>,
     ): Promise<Response> {
         let i = -1;
         const dispatch = async (index: number): Promise<Response> => {
             if (index <= i) throw new Error('next() called multiple times');
             i = index;
-            const fn: IMiddleware | IHandler = index < middleware.length
-                ? middleware[index]
-                : handler;
+            const fn: IMiddleware<_TContext> | IHandler<_TContext> =
+                index < middleware.length ? middleware[index] : handler;
             if (!fn) return new Response('Internal error', { status: 500 });
             return index < middleware.length
                 ? await fn(ctx, () => dispatch(index + 1))
-                : await (fn as IHandler)(ctx);
+                : await (fn as IHandler<_TContext>)(ctx);
         };
-        return this.decorateResponse(await dispatch(0));
+        return this.decorateResponse(await dispatch(0), ctx);
     }
 }
