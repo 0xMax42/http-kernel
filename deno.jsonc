@@ -8,7 +8,8 @@
         "lib": [
             "dom",
             "dom.iterable",
-            "esnext"
+            "esnext",
+            "deno.ns"
         ],
         "strict": true
     },
@@ -24,5 +25,5 @@
             "main.ts"
         ]
     },
-    "importMap": "./import_map.json"
+    //"importMap": "./import_map.json"
 }
