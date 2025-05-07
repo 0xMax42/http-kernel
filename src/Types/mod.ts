@@ -1,3 +1,5 @@
+// deno-coverage-ignore-file
+
 export { isHttpMethod, validHttpMethods } from './HttpMethod.ts';
 export type { HttpMethod } from './HttpMethod.ts';
 export type { Params } from './Params.ts';

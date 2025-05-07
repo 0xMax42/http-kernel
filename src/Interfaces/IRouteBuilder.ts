@@ -4,12 +4,12 @@ import { IMiddleware } from './IMiddleware.ts';
 import { IRouteDefinition } from './IRouteDefinition.ts';
 import { IContext } from './mod.ts';
 
-export interface IRouteBuilderFactory {
+export interface IRouteBuilderFactory<TContext extends IContext = IContext> {
     new (
-        registerRoute: (route: IInternalRoute) => void,
+        registerRoute: (route: IInternalRoute<TContext>) => void,
         def: IRouteDefinition,
-        mws?: IMiddleware[],
-    ): IRouteBuilder;
+        mws?: IMiddleware<TContext>[],
+    ): IRouteBuilder<TContext>;
 }
 
 /**

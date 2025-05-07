@@ -1,3 +1,6 @@
+// deno-coverage-ignore-file
+
+export type { IHttpKernelConfig } from './HttpKernelConfig.ts';
 export type { IContext } from './IContext.ts';
 export type { IHandler } from './IHandler.ts';
 export type { IHttpKernel } from './IHttpKernel.ts';

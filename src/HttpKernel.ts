@@ -2,14 +2,13 @@ import {
     IContext,
     IHandler,
     IHttpKernel,
+    IHttpKernelConfig,
     IInternalRoute,
     IMiddleware,
     IRouteBuilder,
-    IRouteBuilderFactory,
     IRouteDefinition,
 } from './Interfaces/mod.ts';
 import { RouteBuilder } from './RouteBuilder.ts';
-import { ResponseDecorator } from './Types/mod.ts';
 import { parseQuery } from './Utils/mod.ts';
 
 /**
@@ -21,6 +20,7 @@ import { parseQuery } from './Utils/mod.ts';
  */
 export class HttpKernel<TContext extends IContext = IContext>
     implements IHttpKernel<TContext> {
+    private cfg: IHttpKernelConfig<TContext>;
     /**
      * The list of internally registered routes, each with method, matcher, middleware, and handler.
      */
@@ -34,11 +34,16 @@ export class HttpKernel<TContext extends IContext = IContext>
      * @param routeBuilderFactory - Optional factory for creating route builders. Defaults to using `RouteBuilder`.
      */
     public constructor(
-        private readonly decorateResponse: ResponseDecorator = (res) => res,
-        private readonly routeBuilderFactory: IRouteBuilderFactory =
-            RouteBuilder,
+        config?: Partial<IHttpKernelConfig<TContext>>,
     ) {
+        this.cfg = {
+            decorateResponse: (res) => res,
+            routeBuilderFactory: RouteBuilder,
+            ...config,
+        } as IHttpKernelConfig<TContext>;
+
         this.handle = this.handle.bind(this);
+        this.registerRoute = this.registerRoute.bind(this);
     }
 
     /**
@@ -47,8 +52,8 @@ export class HttpKernel<TContext extends IContext = IContext>
     public route<_TContext extends IContext = TContext>(
         definition: IRouteDefinition,
     ): IRouteBuilder {
-        return new this.routeBuilderFactory(
-            this.registerRoute.bind(this),
+        return new this.cfg.routeBuilderFactory(
+            this.registerRoute,
             definition,
         );
     }
@@ -125,6 +130,9 @@ export class HttpKernel<TContext extends IContext = IContext>
                 ? await fn(ctx, () => dispatch(index + 1))
                 : await (fn as IHandler<_TContext>)(ctx);
         };
-        return this.decorateResponse(await dispatch(0), ctx);
+        return this.cfg.decorateResponse(
+            await dispatch(0),
+            ctx as unknown as TContext,
+        );
     }
 }
