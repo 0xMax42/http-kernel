@@ -10,4 +10,10 @@
     "editor.defaultFormatter": "denoland.vscode-deno",
     "editor.detectIndentation": false,
     "editor.indentSize": "tabSize",
+    "exportall.config.folderListener": [
+        "/src/Interfaces",
+        "/src/Utils",
+        "/src/Types",
+        "/src/Errors"
+    ],
 }
