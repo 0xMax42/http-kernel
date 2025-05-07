@@ -1,4 +1,6 @@
+import { Params } from '../Types/mod.ts';
 import { IRouteDefinition } from './IRouteDefinition.ts';
+import { IRouteMatch } from './IRouteMatch.ts';
 
 /**
  * Defines a route matcher function that evaluates whether a route applies to a given request.
@@ -14,7 +16,7 @@ export interface IRouteMatcher {
      * @param req - The raw Request object (may be used for context or headers).
      * @returns An object containing path parameters if matched, or `null` if not matched.
      */
-    (url: URL, req: Request): null | { params: Record<string, string> };
+    (url: URL, req: Request): null | IRouteMatch;
 }
 
 /**

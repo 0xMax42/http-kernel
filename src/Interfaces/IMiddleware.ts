@@ -23,3 +23,21 @@ export interface IMiddleware<TContext extends IContext = IContext> {
      */
     (ctx: TContext, next: () => Promise<Response>): Promise<Response>;
 }
+
+/**
+ * Type guard to verify whether a given value is a valid `IMiddleware` function.
+ *
+ * This guard checks whether the input is a function that accepts exactly two arguments.
+ * Note: This is a structural check and cannot fully guarantee the semantics of a middleware.
+ *
+ * @param value - The value to test.
+ * @returns `true` if the value is structurally a valid middleware function.
+ */
+export function isMiddleware<TContext extends IContext = IContext>(
+    value: unknown,
+): value is IMiddleware<TContext> {
+    return (
+        typeof value === 'function' &&
+        value.length === 2 // ctx, next
+    );
+}

@@ -7,9 +7,17 @@ import {
     IMiddleware,
     IRouteBuilder,
     IRouteDefinition,
+    isHandler,
+    isMiddleware,
 } from './Interfaces/mod.ts';
+import {
+    DeepPartial,
+    HTTP_404_NOT_FOUND,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+    HttpStatusTextMap,
+} from './Types/mod.ts';
 import { RouteBuilder } from './RouteBuilder.ts';
-import { parseQuery } from './Utils/mod.ts';
+import { createEmptyContext, normalizeError } from './Utils/mod.ts';
 
 /**
  * The central HTTP kernel responsible for managing route definitions,
@@ -34,11 +42,25 @@ export class HttpKernel<TContext extends IContext = IContext>
      * @param routeBuilderFactory - Optional factory for creating route builders. Defaults to using `RouteBuilder`.
      */
     public constructor(
-        config?: Partial<IHttpKernelConfig<TContext>>,
+        config?: DeepPartial<IHttpKernelConfig<TContext>>,
     ) {
         this.cfg = {
             decorateResponse: (res) => res,
             routeBuilderFactory: RouteBuilder,
+            httpErrorHandlers: {
+                [HTTP_404_NOT_FOUND]: () =>
+                    new Response(HttpStatusTextMap[HTTP_404_NOT_FOUND], {
+                        status: HTTP_404_NOT_FOUND,
+                    }),
+                [HTTP_500_INTERNAL_SERVER_ERROR]: () =>
+                    new Response(
+                        HttpStatusTextMap[HTTP_500_INTERNAL_SERVER_ERROR],
+                        {
+                            status: HTTP_500_INTERNAL_SERVER_ERROR,
+                        },
+                    ),
+                ...(config?.httpErrorHandlers ?? {}),
+            },
             ...config,
         } as IHttpKernelConfig<TContext>;
 
@@ -51,16 +73,16 @@ export class HttpKernel<TContext extends IContext = IContext>
      */
     public route<_TContext extends IContext = TContext>(
         definition: IRouteDefinition,
-    ): IRouteBuilder {
+    ): IRouteBuilder<_TContext> {
         return new this.cfg.routeBuilderFactory(
             this.registerRoute,
             definition,
-        );
+        ) as IRouteBuilder<_TContext>;
     }
 
     /**
      * @inheritdoc
-     */ public async handle<_TContext extends IContext = TContext>(
+     */ public async handle(
         request: Request,
     ): Promise<Response> {
         const url = new URL(request.url);
@@ -70,21 +92,23 @@ export class HttpKernel<TContext extends IContext = IContext>
             if (route.method !== method) continue;
             const match = route.matcher(url, request);
             if (match) {
-                const ctx: _TContext = {
+                const ctx: TContext = {
                     req: request,
                     params: match.params,
-                    query: parseQuery(url.searchParams),
+                    query: match.query,
                     state: {},
-                } as _TContext;
-                return await this.executePipeline<_TContext>(
+                } as TContext;
+                return await this.executePipeline(
                     ctx,
-                    route.middlewares as unknown as IMiddleware<_TContext>[],
-                    route.handler as unknown as IHandler<_TContext>,
+                    route.middlewares,
+                    route.handler,
                 );
             }
         }
 
-        return new Response('Not Found', { status: 404 });
+        return this.cfg.httpErrorHandlers[HTTP_404_NOT_FOUND](
+            createEmptyContext<TContext>(request),
+        );
     }
 
     /**
@@ -101,38 +125,71 @@ export class HttpKernel<TContext extends IContext = IContext>
     }
 
     /**
-     * Executes the middleware pipeline and final handler for a given request context.
+     * Executes the complete request pipeline: middleware chain, final handler, and optional response decoration.
      *
-     * This function recursively invokes middleware in the order they were registered,
-     * ending with the route's final handler. If a middleware returns a response directly
-     * without calling `next()`, the pipeline is short-circuited.
+     * Middleware functions are invoked sequentially in the order of registration. Each middleware
+     * receives a `next()` callback to advance to the next stage. If a middleware returns a `Response`
+     * directly, the pipeline short-circuits.
      *
-     * The final response is passed through the `decorateResponse` function before being returned.
+     * After the final handler produces a response, it is passed through the configured response decorator,
+     * which may modify it (e.g., adding headers or logging metadata).
      *
-     * @param ctx - The request context containing the request, parameters, and shared state.
-     * @param middleware - The ordered list of middleware to apply before the handler.
-     * @param handler - The final request handler to invoke at the end of the pipeline.
-     * @returns The final HTTP response after middleware and decoration.
+     * Internal error handling ensures:
+     * - That `next()` is not called multiple times.
+     * - That all middleware and handlers are properly typed.
+     * - That thrown exceptions are routed to the 500-error handler.
+     *
+     * @param ctx - The current request context, including request data and shared state.
+     * @param middleware - An ordered list of middleware functions to invoke.
+     * @param handler - The terminal request handler to produce the response.
+     * @returns The final decorated `Response` object.
      */
-    private async executePipeline<_TContext extends IContext = TContext>(
-        ctx: _TContext,
-        middleware: IMiddleware<_TContext>[],
-        handler: IHandler<_TContext>,
+    private async executePipeline(
+        ctx: TContext,
+        middleware: IMiddleware<TContext>[],
+        handler: IHandler<TContext>,
     ): Promise<Response> {
-        let i = -1;
-        const dispatch = async (index: number): Promise<Response> => {
-            if (index <= i) throw new Error('next() called multiple times');
-            i = index;
-            const fn: IMiddleware<_TContext> | IHandler<_TContext> =
-                index < middleware.length ? middleware[index] : handler;
-            if (!fn) return new Response('Internal error', { status: 500 });
-            return index < middleware.length
-                ? await fn(ctx, () => dispatch(index + 1))
-                : await (fn as IHandler<_TContext>)(ctx);
+        const handleInternalError = (ctx: TContext, err?: unknown) =>
+            this.cfg.httpErrorHandlers[HTTP_500_INTERNAL_SERVER_ERROR](
+                ctx,
+                normalizeError(err),
+            );
+
+        let lastIndex = -1;
+
+        const dispatch = async (currentIndex: number): Promise<Response> => {
+            // Prevent middleware from invoking next() multiple times
+            if (currentIndex <= lastIndex) {
+                throw new Error('Middleware called `next()` multiple times');
+            }
+            lastIndex = currentIndex;
+
+            const isWithinMiddleware = currentIndex < middleware.length;
+            const fn = isWithinMiddleware ? middleware[currentIndex] : handler;
+
+            if (isWithinMiddleware) {
+                if (!isMiddleware(fn)) {
+                    throw new Error(
+                        'Expected middleware function, but received invalid value',
+                    );
+                }
+                return await fn(ctx, () => dispatch(currentIndex + 1));
+            }
+
+            if (!isHandler(fn)) {
+                throw new Error(
+                    'Expected request handler, but received invalid value',
+                );
+            }
+
+            return await fn(ctx);
         };
-        return this.cfg.decorateResponse(
-            await dispatch(0),
-            ctx as unknown as TContext,
-        );
+
+        try {
+            const response = await dispatch(0);
+            return this.cfg.decorateResponse(response, ctx);
+        } catch (e) {
+            return handleInternalError(ctx, e);
+        }
     }
 }

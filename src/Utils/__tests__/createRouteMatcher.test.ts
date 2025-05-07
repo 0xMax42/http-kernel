@@ -52,3 +52,67 @@ Deno.test('createRouteMatcher: uses custom matcher if provided', () => {
     assert(result);
     assertEquals(result.params, {});
 });
+
+Deno.test('createRouteMatcher: extracts single query param', () => {
+    const def: IRouteDefinition = { method: 'GET', path: '/search' };
+    const matcher = createRouteMatcher(def);
+
+    const url = new URL('http://localhost/search?q=deno');
+    const result = matcher(url, dummyRequest);
+
+    assert(result);
+    assertEquals(result.params, {}); // no path params
+    assertEquals(result.query, { q: 'deno' }); // single key → string
+});
+
+Deno.test('createRouteMatcher: duplicate query keys become array', () => {
+    const def: IRouteDefinition = { method: 'GET', path: '/tags' };
+    const matcher = createRouteMatcher(def);
+
+    const url = new URL('http://localhost/tags?tag=js&tag=ts&tag=deno');
+    const result = matcher(url, dummyRequest);
+
+    assert(result);
+    assertEquals(result.params, {});
+    assertEquals(result.query, { tag: ['js', 'ts', 'deno'] }); // multi → string[]
+});
+
+Deno.test('createRouteMatcher: mix of single and duplicate keys', () => {
+    const def: IRouteDefinition = { method: 'GET', path: '/filter/:type' };
+    const matcher = createRouteMatcher(def);
+
+    const url = new URL('http://localhost/filter/repo?lang=ts&lang=js&page=2');
+    const result = matcher(url, dummyRequest);
+
+    assert(result);
+    assertEquals(result.params, { type: 'repo' });
+    assertEquals(result.query, {
+        lang: ['ts', 'js'], // duplicated
+        page: '2', // single
+    });
+});
+
+Deno.test('createRouteMatcher: no query parameters returns empty object', () => {
+    const def: IRouteDefinition = { method: 'GET', path: '/info' };
+    const matcher = createRouteMatcher(def);
+
+    const url = new URL('http://localhost/info');
+    const result = matcher(url, dummyRequest);
+
+    assert(result);
+    assertEquals(result.params, {});
+    assertEquals(result.query, {}); // empty
+});
+
+Deno.test('createRouteMatcher: retains array order of duplicate keys', () => {
+    const def: IRouteDefinition = { method: 'GET', path: '/order' };
+    const matcher = createRouteMatcher(def);
+
+    const url = new URL(
+        'http://localhost/order?item=first&item=second&item=third',
+    );
+    const result = matcher(url, dummyRequest);
+
+    assert(result);
+    assertEquals(result.query?.item, ['first', 'second', 'third']);
+});

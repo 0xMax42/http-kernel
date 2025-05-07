@@ -7,4 +7,4 @@
  * All values are strings and should be considered read-only, as they are
  * extracted by the router and should not be modified by application code.
  */
-export type Params = Record<string, string>;
+export type Params = Record<string, string | undefined>;

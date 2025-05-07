@@ -44,7 +44,7 @@ export interface IHttpKernel<TContext extends IContext = IContext> {
      * @param request - The incoming HTTP request to dispatch.
      * @returns A promise resolving to the final HTTP response.
      */
-    handle<_TContext extends IContext = TContext>(
+    handle(
         request: Request,
     ): Promise<Response>;
 }

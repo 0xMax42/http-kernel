@@ -1,7 +1,7 @@
 import { HttpMethod } from '../Types/mod.ts';
 import { IHandler } from './IHandler.ts';
 import { IMiddleware } from './IMiddleware.ts';
-import { IContext } from './mod.ts';
+import { IContext, IRouteMatcher } from './mod.ts';
 
 /**
  * Represents an internally registered route within the HttpKernel.
@@ -27,10 +27,7 @@ export interface IInternalRoute<TContext extends IContext = IContext> {
      * @param req - The original Request object.
      * @returns An object with extracted path parameters, or `null` if not matched.
      */
-    matcher: (
-        url: URL,
-        req: Request,
-    ) => null | { params: Record<string, string> };
+    matcher: IRouteMatcher;
 
     /**
      * An ordered list of middleware functions to be executed before the handler.

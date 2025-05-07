@@ -24,9 +24,9 @@ export interface IRouteBuilder<TContext extends IContext = IContext> {
      * @param mw - A middleware function.
      * @returns The route builder for further chaining.
      */
-    middleware<_TContext extends IContext = TContext>(
-        mw: IMiddleware<_TContext>,
-    ): IRouteBuilder<_TContext>;
+    middleware(
+        mw: IMiddleware<TContext>,
+    ): IRouteBuilder<TContext>;
 
     /**
      * Sets the final request handler for the route.
@@ -34,7 +34,7 @@ export interface IRouteBuilder<TContext extends IContext = IContext> {
      *
      * @param handler - The function to execute when this route is matched.
      */
-    handle<_TContext extends IContext = TContext>(
-        handler: IHandler<_TContext>,
+    handle(
+        handler: IHandler<TContext>,
     ): void;
 }

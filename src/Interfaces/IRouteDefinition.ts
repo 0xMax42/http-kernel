@@ -1,4 +1,4 @@
-import { HttpMethod } from '../Types/mod.ts';
+import { HttpMethod, isHttpMethod } from '../Types/mod.ts';
 import { IRouteMatcher } from './IRouteMatcher.ts';
 
 /**
@@ -45,3 +45,47 @@ export interface IDynamicRouteDefinition {
  * or a dynamic route with a custom matcher function for advanced matching logic.
  */
 export type IRouteDefinition = IStaticRouteDefinition | IDynamicRouteDefinition;
+
+/**
+ * Type guard to check whether a route definition is a valid static route definition.
+ *
+ * Ensures that the object:
+ * - has a `method` property of type `HttpMethod`
+ * - has a `path` property of type `string`
+ * - does NOT have a `matcher` function (to avoid ambiguous mixed types)
+ */
+export function isStaticRouteDefinition(
+    def: IRouteDefinition,
+): def is IStaticRouteDefinition {
+    return (
+        def &&
+        typeof def === 'object' &&
+        'method' in def &&
+        isHttpMethod(def.method) &&
+        'path' in def &&
+        typeof (def as { path?: unknown }).path === 'string' &&
+        !('matcher' in def)
+    );
+}
+
+/**
+ * Type guard to check whether a route definition is a valid dynamic route definition.
+ *
+ * Ensures that the object:
+ * - has a `method` property of type `HttpMethod`
+ * - has a `matcher` property of type `function`
+ * - does NOT have a `path` property (to avoid ambiguous mixed types)
+ */
+export function isDynamicRouteDefinition(
+    def: IRouteDefinition,
+): def is IDynamicRouteDefinition {
+    return (
+        def &&
+        typeof def === 'object' &&
+        'method' in def &&
+        isHttpMethod(def.method) &&
+        'matcher' in def &&
+        typeof (def as { matcher?: unknown }).matcher === 'function' &&
+        !('path' in def)
+    );
+}

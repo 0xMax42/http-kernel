@@ -41,13 +41,13 @@ export class RouteBuilder<TContext extends IContext = IContext>
      * @param mw - A middleware function to be executed before the handler.
      * @returns A new `RouteBuilder` instance for continued chaining.
      */
-    middleware<_TContext extends IContext = TContext>(
-        mw: IMiddleware<_TContext>,
-    ): IRouteBuilder<_TContext> {
-        return new RouteBuilder<_TContext>(
-            this.registerRoute as unknown as RegisterRoute<_TContext>,
+    middleware(
+        mw: IMiddleware<TContext>,
+    ): IRouteBuilder<TContext> {
+        return new RouteBuilder<TContext>(
+            this.registerRoute,
             this.def,
-            [...this.mws as unknown as IMiddleware<_TContext>[], mw],
+            [...this.mws, mw],
         );
     }
 
@@ -59,15 +59,15 @@ export class RouteBuilder<TContext extends IContext = IContext>
      *
      * @param handler - The final request handler for this route.
      */
-    handle<_TContext extends IContext = TContext>(
-        handler: IHandler<_TContext>,
+    handle(
+        handler: IHandler<TContext>,
     ): void {
         const matcher = this.matcherFactory(this.def);
         this.registerRoute({
             method: this.def.method,
             matcher,
             middlewares: this.mws,
-            handler: handler as unknown as IHandler<TContext>,
+            handler: handler,
         });
     }
 }
