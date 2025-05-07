@@ -3,8 +3,8 @@ import {
     assertEquals,
     assertStrictEquals,
 } from 'https://deno.land/std/assert/mod.ts';
-import { IRouteDefinition } from '../Interfaces/mod.ts';
-import { createRouteMatcher } from '../mod.ts';
+import { IRouteDefinition } from '../../Interfaces/mod.ts';
+import { createRouteMatcher } from '../../mod.ts';
 
 // Dummy request
 const dummyRequest = new Request('http://localhost');
