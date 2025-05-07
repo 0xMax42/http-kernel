@@ -1,0 +1,13 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "deno.enable": true,
+    "deno.testing.args": [
+        "--allow-all",
+        "--unstable-kv"
+    ],
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "denoland.vscode-deno",
+    "editor.detectIndentation": false,
+    "editor.indentSize": "tabSize",
+}
