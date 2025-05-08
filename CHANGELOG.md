@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Remove unused workflow_dispatch trigger - ([16c0053](https://git.0xmax42.io/maxp/http-kernel/commit/16c0053964c72d01e5f555ec8f33c9eead160e69))
+- *(tasks)* Remove commented-out start and watch scripts - ([04029f8](https://git.0xmax42.io/maxp/http-kernel/commit/04029f87a3b9dd24e8792b852ead9097e18d23c7))
+
 ## [0.1.0] - 2025-05-08
 
 ### 🚀 Features
