@@ -66,11 +66,11 @@ jobs:
           cargo install git-cliff --version "${{ steps.cliff_version.outputs.version }}" --features gitea
 
       - name: Generate unreleased changelog
-        run: git-cliff -c cliff.toml -o CHANGELOG
+        run: git-cliff -c cliff.toml -o CHANGELOG.md
 
       - name: Commit updated CHANGELOG
         run: |
-          git add CHANGELOG
+          git add CHANGELOG.md
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
@@ -118,7 +118,7 @@ jobs:
         id: generate-changelog
         run: |
           VERSION=${{ steps.version.outputs.value }}
-          git-cliff -c cliff.toml -t "v$VERSION" -o CHANGELOG
+          git-cliff -c cliff.toml -t "v$VERSION" -o CHANGELOG.md
 
           BODY=$(mktemp)
           ESCAPED_VERSION=$(echo "$VERSION" | sed 's/\./\\./g')
@@ -136,14 +136,14 @@ jobs:
               print_flag=0
             }
             print_flag
-          ' CHANGELOG > "$BODY"
+          ' CHANGELOG.md > "$BODY"
 
           echo "changelog_body_path=$BODY" >> $GITHUB_OUTPUT
 
 
       - name: Commit updated CHANGELOG
         run: |
-          git add CHANGELOG
+          git add CHANGELOG.md
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
