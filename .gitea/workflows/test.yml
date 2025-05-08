@@ -1,4 +1,4 @@
-name: Test Deno Project
+name: Test http-kernel
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - '**'
 
 jobs:
-  test:
+  run-test:
     name: Run Tests
     runs-on: ubuntu-latest
 
