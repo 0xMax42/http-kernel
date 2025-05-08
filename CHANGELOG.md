@@ -1,0 +1,43 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.1.0] - 2025-05-08
+
+### 🚀 Features
+
+- *(workflows)* Add automated changelog and release workflow - ([bbf78cf](https://git.0xmax42.io/maxp/http-kernel/commit/bbf78cff17be0cae651b8abf3e239103b26354bf))
+- *(vscode)* Customize activity bar and peacock colors - ([56633cd](https://git.0xmax42.io/maxp/http-kernel/commit/56633cd95b37a8b2cfd8eb95982d07cd1f9b5126))
+- *(workflows)* Add upload assets template for releases - ([7b6eb2b](https://git.0xmax42.io/maxp/http-kernel/commit/7b6eb2b57470198684a1dfa8b668351b8b9a91ae))
+- *(config)* Add project metadata and test watch task - ([b009b57](https://git.0xmax42.io/maxp/http-kernel/commit/b009b5763d1824fc94fdc1e3d919fe2597158f84))
+- *(http)* Add error handling for invalid HTTP methods - ([ba7aa79](https://git.0xmax42.io/maxp/http-kernel/commit/ba7aa79f56772213bf73b62bc6bf8810f3871127))
+- *(http)* Enhance type safety and extend route context - ([a236fa7](https://git.0xmax42.io/maxp/http-kernel/commit/a236fa7c97ae49e6baf560d4ca92c6e83702b3ec))
+
+### 🐛 Bug Fixes
+
+- *(params)* Enforce non-undefined route parameter values - ([b0c6901](https://git.0xmax42.io/maxp/http-kernel/commit/b0c6901d7d272ec98b3d00ef2dd2848482892a25))
+
+### 🚜 Refactor
+
+- *(types)* Unify handler and middleware definitions - ([8235680](https://git.0xmax42.io/maxp/http-kernel/commit/8235680904c7f30f25b98b835d48376431108e91))
+- *(core)* [**breaking**] Enhance HttpKernel pipeline and matcher system with full context and error handling - ([b7410b4](https://git.0xmax42.io/maxp/http-kernel/commit/b7410b44dd8720e46ee2871aa1727ce5039ebad4))
+- *(httpkernel)* Introduce configuration object for flexibility - ([9059bdd](https://git.0xmax42.io/maxp/http-kernel/commit/9059bdda62081c8e775087cabe4c3406e42065a5))
+
+### 📚 Documentation
+
+- *(gitea)* Add release automation guide and scripts - ([5c03cdf](https://git.0xmax42.io/maxp/http-kernel/commit/5c03cdfb031adeb6ee5d0de0889477d6d1efafef))
+- *(httpkernel)* Enhance class and interface documentation - ([6c4420d](https://git.0xmax42.io/maxp/http-kernel/commit/6c4420d32f8e7fe317f7c1b0b45de2dcf8565ef5))
+
+### 🧪 Testing
+
+- *(utils)* Rename and update import paths in test file - ([82a6877](https://git.0xmax42.io/maxp/http-kernel/commit/82a687748558f15c2023861a0cc3a33095c86731))
+- *(utils)* Add unit tests for parseQuery function - ([94525fc](https://git.0xmax42.io/maxp/http-kernel/commit/94525fce5299f3417801f0152a475892e1edac30))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(config)* Add default git-cliff configuration - ([661f83d](https://git.0xmax42.io/maxp/http-kernel/commit/661f83d1fd0101aa0d5d06b60f6eeb68efac6ceb))
+- *(gitignore)* Add .gitea/COMMIT_GPT.md to ignored files - ([f083856](https://git.0xmax42.io/maxp/http-kernel/commit/f0838567b46822327fe739d8de099722e405dfa3))
+- *(settings)* Add exportall configuration for barrel name and message - ([0990cac](https://git.0xmax42.io/maxp/http-kernel/commit/0990cacb225e1cbbbbb2a288501df7de9641294f))
+- *(.gitignore)* Add git_log_diff.txt to ignore list - ([fd1c7f4](https://git.0xmax42.io/maxp/http-kernel/commit/fd1c7f4170ffffd55ab276090f8b90ee82b853fc))
+
+
