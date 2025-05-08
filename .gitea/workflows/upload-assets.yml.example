@@ -1,0 +1,47 @@
+# ========================
+# 📦 Upload Assets Template
+# ========================
+# Dieser Workflow wird automatisch ausgelöst, wenn ein Release
+# in Gitea veröffentlicht wurde (event: release.published).
+#
+# Er dient dem Zweck, Release-Artefakte (wie z. B. Binary-Dateien,
+# Changelogs oder Build-Zips) nachträglich mit dem Release zu verknüpfen.
+#
+# Voraussetzung: Zwei Shell-Skripte liegen im Projekt:
+# - .gitea/scripts/get-release-id.sh → ermittelt Release-ID per Tag
+# - .gitea/scripts/upload-asset.sh → lädt Datei als Release-Asset hoch
+#
+# --------------------------------------
+
+name: Upload Assets
+
+on:
+  release:
+    types: [published]  # Nur bei Veröffentlichung eines Releases (nicht bei Entwürfen)
+
+jobs:
+  upload-assets:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 📥 Checke den Stand des Repos aus, exakt auf dem veröffentlichten Tag
+      # So ist garantiert, dass die Artefakte dem Zustand des Releases entsprechen.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}  # z. B. "v1.2.3"
+          fetch-depth: 0                             # vollständige Git-Historie (für z. B. git-cliff, logs etc.)
+
+      # 🆔 Hole die Release-ID basierend auf dem Tag
+      # Die ID wird als Umgebungsvariable RELEASE_ID über $GITHUB_ENV verfügbar gemacht.
+      - name: Get Release ID from tag
+        run: .gitea/scripts/get-release-id.sh "${{ github.event.release.tag_name }}"
+
+      # 🔼 Upload eines Release-Assets
+      # Beispiel: Lade CHANGELOG.md als Datei mit abweichendem Namen "RELEASE-NOTES.md" hoch
+      #
+      # Du kannst beliebig viele Upload-Schritte hinzufügen oder in einer Schleife iterieren.
+      #
+      # Hinweis: RELEASE_ID wird automatisch verwendet, da get-release-id.sh sie exportiert.
+      #
+      # - name: Upload CHANGELOG.md as RELEASE-NOTES.md
+      #   run: .gitea/scripts/upload-asset.sh ./CHANGELOG.md RELEASE-NOTES.md
