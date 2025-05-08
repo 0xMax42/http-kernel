@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Update changelog file extension to .md and revert b9d25f23fc - ([a88b4d1](https://git.0xmax42.io/maxp/http-kernel/commit/a88b4d112f5c07664d41f6e9d03246307551f25d))
+- Rename changelog and readme files to use .md extension - ([4f2b650](https://git.0xmax42.io/maxp/http-kernel/commit/4f2b65049f461ef377e7231905fd066cbc3c7fe0))
 - *(workflows)* Update test workflow for http-kernel project - ([0311546](https://git.0xmax42.io/maxp/http-kernel/commit/03115464e0fb01b8ca00a2fdabde013d004ae8a2))
 - *(workflows)* Update Deno setup action to v2 - ([1233a0b](https://git.0xmax42.io/maxp/http-kernel/commit/1233a0b7204d12a60f4b7bd1199242a4cb7c4579))
 - *(workflows)* Remove unused workflow_dispatch trigger - ([16c0053](https://git.0xmax42.io/maxp/http-kernel/commit/16c0053964c72d01e5f555ec8f33c9eead160e69))
