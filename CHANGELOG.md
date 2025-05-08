@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Update Deno setup action to v2 - ([1233a0b](https://git.0xmax42.io/maxp/http-kernel/commit/1233a0b7204d12a60f4b7bd1199242a4cb7c4579))
 - *(workflows)* Remove unused workflow_dispatch trigger - ([16c0053](https://git.0xmax42.io/maxp/http-kernel/commit/16c0053964c72d01e5f555ec8f33c9eead160e69))
 - *(tasks)* Remove commented-out start and watch scripts - ([04029f8](https://git.0xmax42.io/maxp/http-kernel/commit/04029f87a3b9dd24e8792b852ead9097e18d23c7))
 
