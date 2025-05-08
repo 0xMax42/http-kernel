@@ -4,17 +4,14 @@ import {
     assertNotEquals,
     assertThrows,
 } from 'https://deno.land/std@0.204.0/assert/mod.ts';
-import {
-    IHandler,
-    IInternalRoute,
-    IMiddleware,
-    IRouteDefinition,
-} from '../Interfaces/mod.ts';
+import { IInternalRoute, IRouteDefinition } from '../Interfaces/mod.ts';
 import { RouteBuilder } from '../mod.ts';
+import { Handler, Middleware } from '../Types/mod.ts';
 
 // Dummy objects
-const dummyHandler: IHandler = async () => new Response('ok');
-const dummyMiddleware: IMiddleware = async (_, next) => await next();
+// deno-lint-ignore require-await
+const dummyHandler: Handler = async () => new Response('ok');
+const dummyMiddleware: Middleware = async (_, next) => await next();
 const dummyDef: IRouteDefinition = { method: 'GET', path: '/hello' };
 const dummyMatcher = () => ({ params: {} });
 
@@ -39,8 +36,8 @@ Deno.test('middleware: middleware is chained immutably', () => {
 });
 
 Deno.test('middleware: preserves order of middleware', () => {
-    const mw1: IMiddleware = async (_, next) => await next();
-    const mw2: IMiddleware = async (_, next) => await next();
+    const mw1: Middleware = async (_, next) => await next();
+    const mw2: Middleware = async (_, next) => await next();
 
     let result: IInternalRoute | null = null as IInternalRoute | null;
 

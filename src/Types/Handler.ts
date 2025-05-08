@@ -1,4 +1,4 @@
-import { IContext } from './IContext.ts';
+import { IContext } from '../Interfaces/mod.ts';
 
 /**
  * Represents a final request handler responsible for producing an HTTP response.
@@ -11,16 +11,23 @@ import { IContext } from './IContext.ts';
  *
  * @template TContext The specific context type for this handler, including typed `state`, `params`, and `query`.
  */
-export interface IHandler<TContext extends IContext = IContext> {
-    /**
-     * Handles the request and generates a response.
-     *
-     * @param ctx - The complete request context, including request metadata, route and query parameters,
-     *              and mutable state populated during the middleware phase.
-     * @returns A `Promise` resolving to an HTTP `Response` to be sent to the client.
-     */
-    (ctx: TContext): Promise<Response>;
-}
+type Handler<TContext extends IContext = IContext> = (
+    ctx: TContext,
+) => Promise<Response>;
+
+/**
+ * Represents a handler function with an associated name.
+ *
+ * This is useful for debugging, logging, or when you need to reference
+ * the handler by name in your application.
+ *
+ * @template TContext The specific context type for this handler, including typed `state`, `params`, and `query`.
+ */
+type NamedHandler<TContext extends IContext = IContext> =
+    & Handler<TContext>
+    & { name?: string };
+
+export type { NamedHandler as Handler };
 
 /**
  * Type guard to determine whether a given value is a valid `IHandler` function.
@@ -42,7 +49,7 @@ export interface IHandler<TContext extends IContext = IContext> {
  */
 export function isHandler<TContext extends IContext = IContext>(
     value: unknown,
-): value is IHandler<TContext> {
+): value is Handler<TContext> {
     return (
         typeof value === 'function' &&
         value.length === 1 // ctx

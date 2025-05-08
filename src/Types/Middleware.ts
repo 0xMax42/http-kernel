@@ -1,4 +1,4 @@
-import { IContext } from './IContext.ts';
+import { IContext } from '../Interfaces/IContext.ts';
 
 /**
  * Represents a middleware function in the HTTP request pipeline.
@@ -13,16 +13,24 @@ import { IContext } from './IContext.ts';
  *
  * @template TContext The specific context type for this middleware, including state, params, and query information.
  */
-export interface IMiddleware<TContext extends IContext = IContext> {
-    /**
-     * Handles the request processing at this middleware stage.
-     *
-     * @param ctx - The full request context, containing request, params, query, and typed state.
-     * @param next - A continuation function that executes the next middleware or handler in the pipeline.
-     * @returns A `Promise` resolving to an HTTP `Response`, either from this middleware or downstream.
-     */
-    (ctx: TContext, next: () => Promise<Response>): Promise<Response>;
-}
+type Middleware<TContext extends IContext = IContext> = (
+    ctx: TContext,
+    next: () => Promise<Response>,
+) => Promise<Response>;
+
+/**
+ * Represents a middleware function with an associated name.
+ *
+ * This is useful for debugging, logging, or when you need to reference
+ * the middleware by name in your application.
+ *
+ * @template TContext The specific context type for this middleware, including state, params, and query information.
+ */
+type NamedMiddleware<TContext extends IContext = IContext> =
+    & Middleware<TContext>
+    & { name?: string };
+
+export type { NamedMiddleware as Middleware };
 
 /**
  * Type guard to verify whether a given value is a valid `IMiddleware` function.
@@ -35,7 +43,7 @@ export interface IMiddleware<TContext extends IContext = IContext> {
  */
 export function isMiddleware<TContext extends IContext = IContext>(
     value: unknown,
-): value is IMiddleware<TContext> {
+): value is Middleware<TContext> {
     return (
         typeof value === 'function' &&
         value.length === 2 // ctx, next

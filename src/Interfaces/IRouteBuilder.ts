@@ -1,6 +1,5 @@
-import { IHandler } from './IHandler.ts';
+import { Handler, Middleware } from '../Types/mod.ts';
 import { IInternalRoute } from './IInternalRoute.ts';
-import { IMiddleware } from './IMiddleware.ts';
 import { IRouteDefinition } from './IRouteDefinition.ts';
 import { IContext } from './mod.ts';
 
@@ -8,7 +7,7 @@ export interface IRouteBuilderFactory<TContext extends IContext = IContext> {
     new (
         registerRoute: (route: IInternalRoute<TContext>) => void,
         def: IRouteDefinition,
-        mws?: IMiddleware<TContext>[],
+        mws?: Middleware<TContext>[],
     ): IRouteBuilder<TContext>;
 }
 
@@ -25,7 +24,7 @@ export interface IRouteBuilder<TContext extends IContext = IContext> {
      * @returns The route builder for further chaining.
      */
     middleware(
-        mw: IMiddleware<TContext>,
+        mw: Middleware<TContext>,
     ): IRouteBuilder<TContext>;
 
     /**
@@ -35,6 +34,6 @@ export interface IRouteBuilder<TContext extends IContext = IContext> {
      * @param handler - The function to execute when this route is matched.
      */
     handle(
-        handler: IHandler<TContext>,
+        handler: Handler<TContext>,
     ): void;
 }

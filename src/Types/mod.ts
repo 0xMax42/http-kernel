@@ -1,6 +1,8 @@
 // deno-coverage-ignore-file
 
 export type { DeepPartial } from './DeepPartial.ts';
+export { isHandler } from './Handler.ts';
+export type { Handler } from './Handler.ts';
 export type { HttpErrorHandler } from './HttpErrorHandler.ts';
 export { isHttpMethod, validHttpMethods } from './HttpMethod.ts';
 export type { HttpMethod } from './HttpMethod.ts';
@@ -34,6 +36,8 @@ export {
     validHttpStatusCodes,
 } from './HttpStatusCode.ts';
 export type { HttpStatusCode } from './HttpStatusCode.ts';
+export { isMiddleware } from './Middleware.ts';
+export type { Middleware } from './Middleware.ts';
 export type { Params } from './Params.ts';
 export type { Query } from './Query.ts';
 export type { RegisterRoute } from './RegisterRoute.ts';

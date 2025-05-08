@@ -1,12 +1,6 @@
 import { IRouteMatcherFactory } from './Interfaces/IRouteMatcher.ts';
-import {
-    IContext,
-    IHandler,
-    IMiddleware,
-    IRouteBuilder,
-    IRouteDefinition,
-} from './Interfaces/mod.ts';
-import { RegisterRoute } from './Types/mod.ts';
+import { IContext, IRouteBuilder, IRouteDefinition } from './Interfaces/mod.ts';
+import { Handler, Middleware, RegisterRoute } from './Types/mod.ts';
 import { createRouteMatcher } from './Utils/createRouteMatcher.ts';
 
 /**
@@ -27,7 +21,7 @@ export class RouteBuilder<TContext extends IContext = IContext>
     constructor(
         private readonly registerRoute: RegisterRoute<TContext>,
         private readonly def: IRouteDefinition,
-        private readonly mws: IMiddleware<TContext>[] = [],
+        private readonly mws: Middleware<TContext>[] = [],
         private readonly matcherFactory: IRouteMatcherFactory =
             createRouteMatcher,
     ) {}
@@ -42,7 +36,7 @@ export class RouteBuilder<TContext extends IContext = IContext>
      * @returns A new `RouteBuilder` instance for continued chaining.
      */
     middleware(
-        mw: IMiddleware<TContext>,
+        mw: Middleware<TContext>,
     ): IRouteBuilder<TContext> {
         return new RouteBuilder<TContext>(
             this.registerRoute,
@@ -60,7 +54,7 @@ export class RouteBuilder<TContext extends IContext = IContext>
      * @param handler - The final request handler for this route.
      */
     handle(
-        handler: IHandler<TContext>,
+        handler: Handler<TContext>,
     ): void {
         const matcher = this.matcherFactory(this.def);
         this.registerRoute({

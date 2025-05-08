@@ -1,6 +1,4 @@
-import { HttpMethod } from '../Types/mod.ts';
-import { IHandler } from './IHandler.ts';
-import { IMiddleware } from './IMiddleware.ts';
+import { Handler, HttpMethod, Middleware } from '../Types/mod.ts';
 import { IContext, IRouteMatcher } from './mod.ts';
 
 /**
@@ -32,10 +30,10 @@ export interface IInternalRoute<TContext extends IContext = IContext> {
     /**
      * An ordered list of middleware functions to be executed before the handler.
      */
-    middlewares: IMiddleware<TContext>[];
+    middlewares: Middleware<TContext>[];
 
     /**
      * The final handler that generates the HTTP response after all middleware has run.
      */
-    handler: IHandler<TContext>;
+    handler: Handler<TContext>;
 }

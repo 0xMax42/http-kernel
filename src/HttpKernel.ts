@@ -1,20 +1,20 @@
 import {
     IContext,
-    IHandler,
     IHttpKernel,
     IHttpKernelConfig,
     IInternalRoute,
-    IMiddleware,
     IRouteBuilder,
     IRouteDefinition,
-    isHandler,
-    isMiddleware,
 } from './Interfaces/mod.ts';
 import {
     DeepPartial,
+    Handler,
     HTTP_404_NOT_FOUND,
     HTTP_500_INTERNAL_SERVER_ERROR,
     HttpStatusTextMap,
+    isHandler,
+    isMiddleware,
+    Middleware,
 } from './Types/mod.ts';
 import { RouteBuilder } from './RouteBuilder.ts';
 import { createEmptyContext, normalizeError } from './Utils/mod.ts';
@@ -151,8 +151,8 @@ export class HttpKernel<TContext extends IContext = IContext>
      */
     private async executePipeline(
         ctx: TContext,
-        middleware: IMiddleware<TContext>[],
-        handler: IHandler<TContext>,
+        middleware: Middleware<TContext>[],
+        handler: Handler<TContext>,
     ): Promise<Response> {
         const handleInternalError = (ctx: TContext, err?: unknown) =>
             this.cfg.httpErrorHandlers[HTTP_500_INTERNAL_SERVER_ERROR](

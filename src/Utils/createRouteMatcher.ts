@@ -35,7 +35,9 @@ export function createRouteMatcher(
         // 3b. Extract route params
         const params: Params = {};
         for (const [key, value] of Object.entries(result.pathname.groups)) {
-            params[key] = value ?? ''; // null → empty string
+            if (value) {
+                params[key] = value;
+            }
         }
 
         // 3c. Extract query parameters – keep duplicates as arrays
