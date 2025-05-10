@@ -26,8 +26,8 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
-- *(git)* Ignore merge conflicts for CHANGELOG.md - ([6399113](https://git.0xmax42.io/maxp/http-kernel/commit/6399113e122e1207ebf4113aebd250358e31f461))
-- *(workflows)* Refine branch handling in release process - ([71ea424](https://git.0xmax42.io/maxp/http-kernel/commit/71ea4247b35dc4afe5090d3c6502bfa936b5a947))
+- *(git)* Ignore merge conflicts for CHANGELOG.md - ([d04dfcd](https://git.0xmax42.io/maxp/http-kernel/commit/d04dfcd63ea2478ffdff2e966d310194dafd8d7d))
+- *(workflows)* Refine branch handling in release process - ([8f94cc9](https://git.0xmax42.io/maxp/http-kernel/commit/8f94cc915c75a11efa1a8e3bdc51ffea9c2f19b5))
 - *(workflows)* Update changelog file extension to .md and revert b9d25f23fc - ([a88b4d1](https://git.0xmax42.io/maxp/http-kernel/commit/a88b4d112f5c07664d41f6e9d03246307551f25d))
 - Rename changelog and readme files to use .md extension - ([4f2b650](https://git.0xmax42.io/maxp/http-kernel/commit/4f2b65049f461ef377e7231905fd066cbc3c7fe0))
 - *(workflows)* Update test workflow for http-kernel project - ([0311546](https://git.0xmax42.io/maxp/http-kernel/commit/03115464e0fb01b8ca00a2fdabde013d004ae8a2))
