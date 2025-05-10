@@ -122,3 +122,77 @@ git commit -m "chore(version): bump to 1.2.3"
 ```
 
 > Nur die ersten beiden erscheinen im Changelog – der dritte wird **automatisch übersprungen**.
+
+---
+
+## 🧾 Umgang mit `CHANGELOG.md` beim Mergen und Releasen
+
+Wenn du automatisiert einen Changelog mit `git-cliff` erzeugst, ist `CHANGELOG.md` ein **generiertes Artefakt** – und kein handgepflegter Quelltext.
+
+Beim Mergen von Feature-Branches in `main` kann es deshalb zu **unnötigen Konflikten** in dieser Datei kommen, obwohl der Inhalt später sowieso neu erzeugt wird.
+
+---
+
+## 🧼 Umgang mit `CHANGELOG.md` in Feature-Branches
+
+Wenn du mit **Feature-Branches** arbeitest, wird `CHANGELOG.md` dort oft automatisch erzeugt.
+Das kann beim späteren Merge in `main` zu **unnötigen Merge-Konflikten** führen.
+
+### ✅ Empfohlene Vorgehensweise
+
+**Bevor du den Branch mit `main` zusammenführst** (Merge oder Cherry-Pick):
+
+```bash
+git rm CHANGELOG.md
+git commit -m "chore(changelog): remove generated CHANGELOG.md before merge"
+git push
+```
+
+Dadurch:
+
+* verhinderst du Merge-Konflikte mit `CHANGELOG.md`
+* wird die Datei bei Feature-Branches nicht mehr automatisch erzeugt
+* bleibt deine Historie sauber und konfliktfrei
+
+> 💡 Der Workflow erzeugt `CHANGELOG.md` automatisch **nur**, wenn:
+>
+> * die Datei schon vorhanden ist **oder**
+> * der Branch `main` heißt
+
+---
+
+## 🧩 Merge-Konflikte verhindern mit `.gitattributes`
+
+Damit Git bei Konflikten in `CHANGELOG.md` **automatisch deine Version bevorzugt**, kannst du folgende Zeile in die Datei `.gitattributes` aufnehmen:
+
+```gitattributes
+CHANGELOG.md merge=ours
+```
+
+Das bedeutet:
+
+* Beim Merge wird die Version aus dem aktuellen Branch (`ours`) behalten
+* Änderungen aus dem Ziel-Branch (`theirs`) werden verworfen
+
+### ✅ So verwendest du es richtig:
+
+1. **Füge die Regel in `main` hinzu**:
+
+```bash
+echo "CHANGELOG.md merge=ours" >> .gitattributes
+git add .gitattributes
+git commit -m "chore(git): prevent merge conflicts in CHANGELOG.md"
+git push origin main
+```
+
+2. **Hole sie in deinen Feature-Branch**:
+
+```bash
+git checkout feature/xyz
+git rebase origin/main
+```
+
+3. **Ab sofort werden Konflikte in `CHANGELOG.md` automatisch aufgelöst** – lokal.
+
+> ⚠️ Hinweis: Plattformen wie **Gitea, GitHub oder GitLab ignorieren `.gitattributes` beim Merge über die Web-Oberfläche**.
+> Führe Merges daher **lokal** durch, wenn du Konflikte verhindern willst.
