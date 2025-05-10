@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
 
+### 🐛 Bug Fixes
+
+- *(workflows)* Ensure version detection output is always set - ([3707242](https://git.0xmax42.io/maxp/http-kernel/commit/3707242d278e15c55a41056bb64810f6824d24b3))
+
 ### 🚜 Refactor
 
 - *(workflows)* Rename changelog file for consistency - ([b9d25f2](https://git.0xmax42.io/maxp/http-kernel/commit/b9d25f23fc6ad7696deee319024aa5b1af4d98c0))
