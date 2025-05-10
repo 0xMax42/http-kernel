@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- *(workflows)* Conditionally generate changelog - ([b44bb2d](https://git.0xmax42.io/maxp/http-kernel/commit/b44bb2ddafe99c85b25229d2c4a0dfeacf750052))
 - *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
 
 ### 🐛 Bug Fixes
