@@ -71,8 +71,14 @@ jobs:
         run: |
           cargo install git-cliff --version "${{ steps.cliff_version.outputs.version }}" --features gitea
 
-      - name: Generate unreleased changelog
-        run: git-cliff -c cliff.toml -o CHANGELOG.md
+      - name: Generate unreleased changelog (if file exists or on main)
+        run: |
+          if [[ -f CHANGELOG.md || "${GITHUB_REF##refs/heads/}" == "main" ]]; then
+            echo "Generating CHANGELOG.md..."
+            git-cliff -c cliff.toml -o CHANGELOG.md
+          else
+            echo "CHANGELOG.md does not exist and this is not 'main'. Skipping generation."
+          fi
 
       - name: Commit updated CHANGELOG
         run: |
