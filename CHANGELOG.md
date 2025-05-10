@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation
 
+- *(release)* Update guidelines for handling changelog - ([6a0f1c7](https://git.0xmax42.io/maxp/http-kernel/commit/6a0f1c774bc01ab976090612bbc361576feb3942))
 - Add README for HttpKernel project - ([a1ce306](https://git.0xmax42.io/maxp/http-kernel/commit/a1ce30627c68a3f869eb6a104308322af8596dc1))
 - Add MIT license file - ([5118a19](https://git.0xmax42.io/maxp/http-kernel/commit/5118a19aeaa1102591aa7fe093fdec1aa19dc7f5))
 
