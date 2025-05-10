@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- *(interfaces)* Add pipeline executor interface - ([927a908](https://git.0xmax42.io/maxp/http-kernel/commit/927a9081d4f363202520d017eb424c7c097ced94))
+- *(pipeline)* Add configuration and hooks for pipeline execution - ([3f114bb](https://git.0xmax42.io/maxp/http-kernel/commit/3f114bb68d94c48a53514752d57cb4f01adeaae3))
 - *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
+
+### 🐛 Bug Fixes
+
+- *(workflows)* Ensure version detection output is always set - ([abd2d6e](https://git.0xmax42.io/maxp/http-kernel/commit/abd2d6e8402662f863d9974aaa0bc228a4777724))
 
 ### 🚜 Refactor
 
@@ -14,11 +20,13 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation
 
+- *(pipeline)* Add design plan for PipelineExecutor class - ([0846dbb](https://git.0xmax42.io/maxp/http-kernel/commit/0846dbb758ba788f969a381c56498920ee0f9562))
 - Add README for HttpKernel project - ([a1ce306](https://git.0xmax42.io/maxp/http-kernel/commit/a1ce30627c68a3f869eb6a104308322af8596dc1))
 - Add MIT license file - ([5118a19](https://git.0xmax42.io/maxp/http-kernel/commit/5118a19aeaa1102591aa7fe093fdec1aa19dc7f5))
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Refine branch handling in release process - ([8f94cc9](https://git.0xmax42.io/maxp/http-kernel/commit/8f94cc915c75a11efa1a8e3bdc51ffea9c2f19b5))
 - *(workflows)* Update changelog file extension to .md and revert b9d25f23fc - ([a88b4d1](https://git.0xmax42.io/maxp/http-kernel/commit/a88b4d112f5c07664d41f6e9d03246307551f25d))
 - Rename changelog and readme files to use .md extension - ([4f2b650](https://git.0xmax42.io/maxp/http-kernel/commit/4f2b65049f461ef377e7231905fd066cbc3c7fe0))
 - *(workflows)* Update test workflow for http-kernel project - ([0311546](https://git.0xmax42.io/maxp/http-kernel/commit/03115464e0fb01b8ca00a2fdabde013d004ae8a2))
