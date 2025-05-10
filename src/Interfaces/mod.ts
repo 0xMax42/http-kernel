@@ -5,6 +5,10 @@ export type { IHttpErrorHandlers } from './IHttpErrorHandlers.ts';
 export type { IHttpKernel } from './IHttpKernel.ts';
 export type { IHttpKernelConfig } from './IHttpKernelConfig.ts';
 export type { IInternalRoute } from './IInternalRoute.ts';
+export type {
+    IPipelineExecutor,
+    PipelineExecutorFactory,
+} from './IPipelineExecutor.ts';
 export type { IPipelineExecutorConfig } from './IPipelineExecutorConfig.ts';
 export type { IPipelineHooks } from './IPipelineHooks.ts';
 export type { IRouteBuilder, IRouteBuilderFactory } from './IRouteBuilder.ts';
