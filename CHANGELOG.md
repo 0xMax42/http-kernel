@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Refine branch handling in release process - ([71ea424](https://git.0xmax42.io/maxp/http-kernel/commit/71ea4247b35dc4afe5090d3c6502bfa936b5a947))
 - *(workflows)* Update changelog file extension to .md and revert b9d25f23fc - ([a88b4d1](https://git.0xmax42.io/maxp/http-kernel/commit/a88b4d112f5c07664d41f6e9d03246307551f25d))
 - Rename changelog and readme files to use .md extension - ([4f2b650](https://git.0xmax42.io/maxp/http-kernel/commit/4f2b65049f461ef377e7231905fd066cbc3c7fe0))
 - *(workflows)* Update test workflow for http-kernel project - ([0311546](https://git.0xmax42.io/maxp/http-kernel/commit/03115464e0fb01b8ca00a2fdabde013d004ae8a2))
