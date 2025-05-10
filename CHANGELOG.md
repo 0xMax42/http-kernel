@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- *(workflows)* Conditionally generate changelog - ([2ab6f1b](https://git.0xmax42.io/maxp/http-kernel/commit/2ab6f1b8db2d7bd31ca30248d0de183f17a5738c))
 - *(interfaces)* Add pipeline executor interface - ([927a908](https://git.0xmax42.io/maxp/http-kernel/commit/927a9081d4f363202520d017eb424c7c097ced94))
 - *(pipeline)* Add configuration and hooks for pipeline execution - ([3f114bb](https://git.0xmax42.io/maxp/http-kernel/commit/3f114bb68d94c48a53514752d57cb4f01adeaae3))
 - *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
