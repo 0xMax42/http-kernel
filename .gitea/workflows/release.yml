@@ -9,31 +9,35 @@ on:
 jobs:
   detect-version-change:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     outputs:
-      version_changed: ${{ steps.check.outputs.version_changed }}
+      version_changed: ${{ steps.set.outputs.version_changed }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Check if VERSION file changed
-        id: check
+        if: github.ref == 'refs/heads/main'
         run: |
           echo "🔍 Vergleich mit github.event.before:"
           echo "Before: ${{ github.event.before }}"
           echo "After:  ${{ github.sha }}"
-          
+
           echo "📄 Changed files between before and after:"
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} || echo "(diff failed)"
 
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^VERSION$'; then
-            echo "✅ VERSION file was changed between before and after"
-            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "✅ VERSION file was changed"
+            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
           else
-            echo "ℹ️ VERSION file not changed between before and after"
-            echo "version_changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ VERSION file not changed"
+            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
           fi
+
+      - name: Set output (always)
+        id: set
+        run: |
+          echo "version_changed=${VERSION_CHANGED:-false}" >> $GITHUB_OUTPUT
 
   changelog-only:
     needs: detect-version-change
