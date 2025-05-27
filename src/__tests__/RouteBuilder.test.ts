@@ -10,10 +10,23 @@ import type { Handler, Middleware } from '../Types/mod.ts';
 
 // Dummy objects
 // deno-lint-ignore require-await
-const dummyHandler: Handler = async () => new Response('ok');
+const dummyHandler: Handler = async (_) => new Response('ok');
+// deno-lint-ignore require-await
+const wrongHandler: Handler = async () => new Response('ok'); // Wrong signature, no ctx
 const dummyMiddleware: Middleware = async (_, next) => await next();
+// deno-lint-ignore require-await
+const wrongMiddleware: Middleware = async () => new Response('ok'); // Wrong signature, no ctx, next
 const dummyDef: IRouteDefinition = { method: 'GET', path: '/hello' };
 const dummyMatcher = () => ({ params: {} });
+
+Deno.test('middleware: throws if middleware signature is wrong', () => {
+    const builder = new RouteBuilder(() => {}, dummyDef);
+    assertThrows(
+        () => builder.middleware(wrongMiddleware).handle(dummyHandler),
+        TypeError,
+        'Middleware at index 0 is not a valid function.',
+    );
+});
 
 Deno.test('middleware: single middleware is registered correctly', () => {
     let registered: IInternalRoute | null = null as IInternalRoute | null;
@@ -49,6 +62,15 @@ Deno.test('middleware: preserves order of middleware', () => {
 
     assert(result);
     assertEquals(result!.middlewares, [mw1, mw2]);
+});
+
+Deno.test('handle: throws if handler signature is wrong', () => {
+    const builder = new RouteBuilder(() => {}, dummyDef);
+    assertThrows(
+        () => builder.handle(wrongHandler),
+        TypeError,
+        'Route handler must be a function returning a Promise<Response>.',
+    );
 });
 
 Deno.test('handle: uppercases method', () => {
