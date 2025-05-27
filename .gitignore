@@ -2,6 +2,7 @@
 coverage/
 logs/
 .locale/
+.local/
 cache/
 out.py
 output.txt
