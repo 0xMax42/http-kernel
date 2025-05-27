@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.2.0](https://git.0xmax42.io/maxp/http-kernel/compare/v0.1.0..v0.2.0) - 2025-05-27
 
 ### 🚀 Features
 
