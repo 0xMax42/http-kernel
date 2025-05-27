@@ -24,6 +24,7 @@ jobs:
 
       - name: Run CI Checks
         run: |
-          deno fmt --check
-          deno lint
+          deno task fmt
+          deno task lint
           deno task test
+          deno task benchmark
