@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(workflows)* Consolidate and update CI configuration - ([ec1697d](https://git.0xmax42.io/maxp/http-kernel/commit/ec1697df94b5378f1766663e278a41d403a64336))
 - *(config)* Add exports field to module metadata - ([c28eb7f](https://git.0xmax42.io/maxp/http-kernel/commit/c28eb7f28dfaa8d3fdc540c4bcc306a3a8b9d6f8))
 - *(git)* Ignore merge conflicts for CHANGELOG.md - ([6399113](https://git.0xmax42.io/maxp/http-kernel/commit/6399113e122e1207ebf4113aebd250358e31f461))
 - *(workflows)* Refine branch handling in release process - ([71ea424](https://git.0xmax42.io/maxp/http-kernel/commit/71ea4247b35dc4afe5090d3c6502bfa936b5a947))
