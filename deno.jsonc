@@ -9,7 +9,8 @@
         "test:watch": "deno test --watch --allow-net --allow-env --unstable-kv --allow-read --allow-write **/__tests__/*.test.ts",
         "benchmark": "deno bench --allow-net --allow-env --unstable-kv --allow-read --allow-write **/__bench__/*.bench.ts",
         "fmt": "deno fmt --check",
-        "lint": "deno lint"
+        "lint": "deno lint",
+        "ci": "deno task fmt && deno task lint && deno task test && deno task benchmark" // For local CI checks
     },
     "compilerOptions": {
         "lib": [
