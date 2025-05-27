@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- *(workflows)* Add GitHub release sync workflow - ([de6d3ee](https://git.0xmax42.io/maxp/http-kernel/commit/de6d3ee389b0d92c5056e47be85da1d0c41f62af))
+- *(ci)* Enhance CI workflow with granular steps and error handling - ([54cfa18](https://git.0xmax42.io/maxp/http-kernel/commit/54cfa1888e13d0872b5411e83d3d45925f2687ee))
+- *(route-builder)* Add middleware chain compilation - ([35d83c0](https://git.0xmax42.io/maxp/http-kernel/commit/35d83c073ef8644d657195c332b463d18e856e18))
+- *(interfaces)* Add runRoute method to IInternalRoute - ([67ebb43](https://git.0xmax42.io/maxp/http-kernel/commit/67ebb4307a2a1c588b78f8f0c498d1a4276ad09b))
 - *(workflows)* Conditionally generate changelog - ([b44bb2d](https://git.0xmax42.io/maxp/http-kernel/commit/b44bb2ddafe99c85b25229d2c4a0dfeacf750052))
 - *(workflows)* Add CI for Deno project tests - ([9d5db4f](https://git.0xmax42.io/maxp/http-kernel/commit/9d5db4f414cf961248f2b879f2b132b81a32cb92))
 
@@ -15,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
+- *(kernel)* Simplify middleware and handler execution - ([aea3fb4](https://git.0xmax42.io/maxp/http-kernel/commit/aea3fb45e7c099a38440c85783747e80fca54ba6))
 - *(imports)* Use explicit type-only imports across codebase - ([b83aa33](https://git.0xmax42.io/maxp/http-kernel/commit/b83aa330b34523e5102ab98ee61dedbbd62d4656))
 - *(workflows)* Rename changelog file for consistency - ([b9d25f2](https://git.0xmax42.io/maxp/http-kernel/commit/b9d25f23fc6ad7696deee319024aa5b1af4d98c0))
 
@@ -24,8 +29,15 @@ All notable changes to this project will be documented in this file.
 - Add README for HttpKernel project - ([a1ce306](https://git.0xmax42.io/maxp/http-kernel/commit/a1ce30627c68a3f869eb6a104308322af8596dc1))
 - Add MIT license file - ([5118a19](https://git.0xmax42.io/maxp/http-kernel/commit/5118a19aeaa1102591aa7fe093fdec1aa19dc7f5))
 
+### 🧪 Testing
+
+- *(routebuilder)* Add validation tests for handler and middleware - ([b14e9ac](https://git.0xmax42.io/maxp/http-kernel/commit/b14e9acc5f9617a01886e7734b2ae717b86de03e))
+- *(httpkernel)* Enforce compile-time validation for signatures - ([731bba2](https://git.0xmax42.io/maxp/http-kernel/commit/731bba22d88df077b0a39293ddd1a3eec3bf96e8))
+- *(bench)* Add parallel benchmarks for HTTP kernel - ([3da34e2](https://git.0xmax42.io/maxp/http-kernel/commit/3da34e268426b92510c7f9b730a2fa297dca6fbf))
+
 ### ⚙️ Miscellaneous Tasks
 
+- *(config)* Add CI task for local checks - ([c207dc7](https://git.0xmax42.io/maxp/http-kernel/commit/c207dc7392d9f40e7b7c736eadf6c9c7bbf9b7d4))
 - *(gitignore)* Add .local directory to ignored files - ([1b447f5](https://git.0xmax42.io/maxp/http-kernel/commit/1b447f51900b3a1a7f1be9d5192fd5aba37bdbc4))
 - *(ci)* Update deno tasks in CI workflow - ([38c00b0](https://git.0xmax42.io/maxp/http-kernel/commit/38c00b035bfd05c83d5898c97c9423a653db0840))
 - *(tasks)* Add benchmark, format, and lint commands - ([6e6e616](https://git.0xmax42.io/maxp/http-kernel/commit/6e6e61693fef3b11a81ce260d80bc93edae1e718))
