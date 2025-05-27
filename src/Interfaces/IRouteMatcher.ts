@@ -1,6 +1,5 @@
-import { Params } from '../Types/mod.ts';
-import { IRouteDefinition } from './IRouteDefinition.ts';
-import { IRouteMatch } from './IRouteMatch.ts';
+import type { IRouteDefinition } from './IRouteDefinition.ts';
+import type { IRouteMatch } from './IRouteMatch.ts';
 
 /**
  * Defines a route matcher function that evaluates whether a route applies to a given request.

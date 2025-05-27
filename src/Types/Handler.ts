@@ -1,4 +1,4 @@
-import { IContext } from '../Interfaces/mod.ts';
+import type { IContext } from '../Interfaces/mod.ts';
 
 /**
  * Represents a final request handler responsible for producing an HTTP response.

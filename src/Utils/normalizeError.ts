@@ -22,11 +22,9 @@
  * ```
  */
 export function normalizeError(unknownError: unknown): Error {
-    return unknownError instanceof Error
-        ? unknownError
-        : new Error(
-            typeof unknownError === 'string'
-                ? unknownError
-                : JSON.stringify(unknownError),
-        );
+    return unknownError instanceof Error ? unknownError : new Error(
+        typeof unknownError === 'string'
+            ? unknownError
+            : JSON.stringify(unknownError),
+    );
 }

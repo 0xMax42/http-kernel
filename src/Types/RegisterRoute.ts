@@ -1,5 +1,5 @@
-import { IContext } from '../Interfaces/IContext.ts';
-import { IInternalRoute } from '../Interfaces/mod.ts';
+import type { IContext } from '../Interfaces/IContext.ts';
+import type { IInternalRoute } from '../Interfaces/mod.ts';
 
 /**
  * A type alias for the internal route registration function used by the `HttpKernel`.

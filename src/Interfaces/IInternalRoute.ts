@@ -1,5 +1,5 @@
-import { Handler, HttpMethod, Middleware } from '../Types/mod.ts';
-import { IContext, IRouteMatcher } from './mod.ts';
+import type { Handler, HttpMethod, Middleware } from '../Types/mod.ts';
+import type { IContext, IRouteMatcher } from './mod.ts';
 
 /**
  * Represents an internally registered route within the HttpKernel.

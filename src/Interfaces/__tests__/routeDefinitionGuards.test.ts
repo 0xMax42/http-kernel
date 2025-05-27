@@ -1,6 +1,6 @@
 import { assertEquals } from 'https://deno.land/std@0.204.0/assert/mod.ts';
 import {
-    IRouteDefinition,
+    type IRouteDefinition,
     isDynamicRouteDefinition,
     isStaticRouteDefinition,
 } from '../IRouteDefinition.ts';

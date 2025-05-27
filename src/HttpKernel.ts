@@ -1,4 +1,4 @@
-import {
+import type {
     IContext,
     IHttpKernel,
     IHttpKernelConfig,
@@ -7,14 +7,14 @@ import {
     IRouteDefinition,
 } from './Interfaces/mod.ts';
 import {
-    DeepPartial,
-    Handler,
+    type DeepPartial,
+    type Handler,
     HTTP_404_NOT_FOUND,
     HTTP_500_INTERNAL_SERVER_ERROR,
     HttpStatusTextMap,
     isHandler,
     isMiddleware,
-    Middleware,
+    type Middleware,
 } from './Types/mod.ts';
 import { RouteBuilder } from './RouteBuilder.ts';
 import { createEmptyContext, normalizeError } from './Utils/mod.ts';

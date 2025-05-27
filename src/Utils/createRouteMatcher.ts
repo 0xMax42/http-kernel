@@ -1,12 +1,12 @@
 // createRouteMatcher.ts
 
 import {
-    IRouteDefinition,
-    IRouteMatch,
-    IRouteMatcher,
+    type IRouteDefinition,
+    type IRouteMatch,
+    type IRouteMatcher,
     isDynamicRouteDefinition,
 } from '../Interfaces/mod.ts';
-import { Params, Query } from '../Types/mod.ts';
+import type { Params, Query } from '../Types/mod.ts';
 
 /**
  * Transforms a route definition into a matcher using Deno's URLPattern API.

@@ -1,4 +1,4 @@
-import { Params, Query, State } from '../Types/mod.ts';
+import type { Params, Query, State } from '../Types/mod.ts';
 
 /**
  * Represents the complete context for a single HTTP request,

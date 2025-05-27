@@ -1,7 +1,7 @@
-import { ResponseDecorator } from '../Types/mod.ts';
-import { IContext } from './IContext.ts';
-import { IHttpErrorHandlers } from './IHttpErrorHandlers.ts';
-import { IRouteBuilderFactory } from './IRouteBuilder.ts';
+import type { ResponseDecorator } from '../Types/mod.ts';
+import type { IContext } from './IContext.ts';
+import type { IHttpErrorHandlers } from './IHttpErrorHandlers.ts';
+import type { IRouteBuilderFactory } from './IRouteBuilder.ts';
 
 export interface IHttpKernelConfig<TContext extends IContext = IContext> {
     decorateResponse: ResponseDecorator<TContext>;

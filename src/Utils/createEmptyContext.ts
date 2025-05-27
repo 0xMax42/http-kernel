@@ -1,5 +1,5 @@
-import { IContext } from '../Interfaces/mod.ts';
-import { Params, Query, State } from '../Types/mod.ts';
+import type { IContext } from '../Interfaces/mod.ts';
+import type { Params, Query, State } from '../Types/mod.ts';
 
 /**
  * Creates an empty request context suitable for fallback handlers (e.g., 404 or 500 errors).

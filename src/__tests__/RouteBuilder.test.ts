@@ -4,9 +4,9 @@ import {
     assertNotEquals,
     assertThrows,
 } from 'https://deno.land/std@0.204.0/assert/mod.ts';
-import { IInternalRoute, IRouteDefinition } from '../Interfaces/mod.ts';
+import type { IInternalRoute, IRouteDefinition } from '../Interfaces/mod.ts';
 import { RouteBuilder } from '../mod.ts';
-import { Handler, Middleware } from '../Types/mod.ts';
+import type { Handler, Middleware } from '../Types/mod.ts';
 
 // Dummy objects
 // deno-lint-ignore require-await
@@ -91,7 +91,7 @@ Deno.test('handle: works with no middleware', async () => {
 Deno.test('handle: uses custom matcher factory', () => {
     let called = false;
 
-    const factory = (def: IRouteDefinition) => {
+    const factory = (_def: IRouteDefinition) => {
         called = true;
         return dummyMatcher;
     };

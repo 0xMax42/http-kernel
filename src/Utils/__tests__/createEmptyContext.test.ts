@@ -1,6 +1,6 @@
 import { assertEquals } from 'https://deno.land/std/assert/mod.ts';
 import { createEmptyContext } from '../createEmptyContext.ts';
-import { IContext } from '../../Interfaces/mod.ts';
+import type { IContext } from '../../Interfaces/mod.ts';
 
 Deno.test('createEmptyContext: returns default-initialized context', () => {
     const request = new Request('http://localhost');

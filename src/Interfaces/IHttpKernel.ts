@@ -1,6 +1,6 @@
-import { IContext } from './IContext.ts';
-import { IRouteBuilder } from './IRouteBuilder.ts';
-import { IRouteDefinition } from './IRouteDefinition.ts';
+import type { IContext } from './IContext.ts';
+import type { IRouteBuilder } from './IRouteBuilder.ts';
+import type { IRouteDefinition } from './IRouteDefinition.ts';
 
 /**
  * The `IHttpKernel` interface defines the public API for a type-safe, middleware-driven HTTP dispatching system.

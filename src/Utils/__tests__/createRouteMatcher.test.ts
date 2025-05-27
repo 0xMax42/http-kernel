@@ -3,7 +3,7 @@ import {
     assertEquals,
     assertStrictEquals,
 } from 'https://deno.land/std/assert/mod.ts';
-import { IRouteDefinition } from '../../Interfaces/mod.ts';
+import type { IRouteDefinition } from '../../Interfaces/mod.ts';
 import { createRouteMatcher } from '../../mod.ts';
 
 // Dummy request

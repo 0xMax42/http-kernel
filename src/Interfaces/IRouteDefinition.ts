@@ -1,5 +1,5 @@
-import { HttpMethod, isHttpMethod } from '../Types/mod.ts';
-import { IRouteMatcher } from './IRouteMatcher.ts';
+import { type HttpMethod, isHttpMethod } from '../Types/mod.ts';
+import type { IRouteMatcher } from './IRouteMatcher.ts';
 
 /**
  * Defines a static route using a path pattern with optional parameters.

@@ -1,4 +1,4 @@
-import { IContext } from '../Interfaces/mod.ts';
+import type { IContext } from '../Interfaces/mod.ts';
 
 /**
  * Defines a handler function for errors that occur during the execution

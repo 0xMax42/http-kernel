@@ -1,6 +1,10 @@
-import { IRouteMatcherFactory } from './Interfaces/IRouteMatcher.ts';
-import { IContext, IRouteBuilder, IRouteDefinition } from './Interfaces/mod.ts';
-import { Handler, Middleware, RegisterRoute } from './Types/mod.ts';
+import type { IRouteMatcherFactory } from './Interfaces/IRouteMatcher.ts';
+import type {
+    IContext,
+    IRouteBuilder,
+    IRouteDefinition,
+} from './Interfaces/mod.ts';
+import type { Handler, Middleware, RegisterRoute } from './Types/mod.ts';
 import { createRouteMatcher } from './Utils/createRouteMatcher.ts';
 
 /**

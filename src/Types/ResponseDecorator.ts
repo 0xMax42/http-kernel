@@ -1,4 +1,4 @@
-import { IContext } from '../Interfaces/mod.ts';
+import type { IContext } from '../Interfaces/mod.ts';
 
 /**
  * A function that modifies or enriches an outgoing HTTP response before it is returned to the client.

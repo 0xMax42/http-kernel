@@ -1,5 +1,5 @@
-import { IContext } from '../Interfaces/mod.ts';
-import { HttpErrorHandler, validHttpErrorCodes } from '../Types/mod.ts';
+import type { IContext } from '../Interfaces/mod.ts';
+import type { HttpErrorHandler, validHttpErrorCodes } from '../Types/mod.ts';
 
 /**
  * A mapping of HTTP status codes to their corresponding error handlers.

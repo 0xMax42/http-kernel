@@ -1,4 +1,4 @@
-import { IContext } from '../Interfaces/IContext.ts';
+import type { IContext } from '../Interfaces/IContext.ts';
 
 /**
  * Represents a middleware function in the HTTP request pipeline.

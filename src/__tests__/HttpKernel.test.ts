@@ -1,6 +1,6 @@
 import { assertEquals } from 'https://deno.land/std@0.204.0/assert/mod.ts';
 import { HttpKernel } from '../HttpKernel.ts';
-import { IRouteDefinition } from '../Interfaces/mod.ts';
+import type { IRouteDefinition } from '../Interfaces/mod.ts';
 
 Deno.test('HttpKernel: matches static route and executes handler', async () => {
     const kernel = new HttpKernel();

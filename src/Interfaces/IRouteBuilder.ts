@@ -1,7 +1,7 @@
-import { Handler, Middleware } from '../Types/mod.ts';
-import { IInternalRoute } from './IInternalRoute.ts';
-import { IRouteDefinition } from './IRouteDefinition.ts';
-import { IContext } from './mod.ts';
+import type { Handler, Middleware } from '../Types/mod.ts';
+import type { IInternalRoute } from './IInternalRoute.ts';
+import type { IRouteDefinition } from './IRouteDefinition.ts';
+import type { IContext } from './mod.ts';
 
 export interface IRouteBuilderFactory<TContext extends IContext = IContext> {
     new (
