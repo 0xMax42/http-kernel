@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
+- *(imports)* Use explicit type-only imports across codebase - ([b83aa33](https://git.0xmax42.io/maxp/http-kernel/commit/b83aa330b34523e5102ab98ee61dedbbd62d4656))
 - *(workflows)* Rename changelog file for consistency - ([b9d25f2](https://git.0xmax42.io/maxp/http-kernel/commit/b9d25f23fc6ad7696deee319024aa5b1af4d98c0))
 
 ### 📚 Documentation
@@ -25,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(config)* Add exports field to module metadata - ([c28eb7f](https://git.0xmax42.io/maxp/http-kernel/commit/c28eb7f28dfaa8d3fdc540c4bcc306a3a8b9d6f8))
 - *(git)* Ignore merge conflicts for CHANGELOG.md - ([6399113](https://git.0xmax42.io/maxp/http-kernel/commit/6399113e122e1207ebf4113aebd250358e31f461))
 - *(workflows)* Refine branch handling in release process - ([71ea424](https://git.0xmax42.io/maxp/http-kernel/commit/71ea4247b35dc4afe5090d3c6502bfa936b5a947))
 - *(workflows)* Update changelog file extension to .md and revert b9d25f23fc - ([a88b4d1](https://git.0xmax42.io/maxp/http-kernel/commit/a88b4d112f5c07664d41f6e9d03246307551f25d))
