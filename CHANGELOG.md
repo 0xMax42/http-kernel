@@ -26,6 +26,9 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(gitignore)* Add .local directory to ignored files - ([1b447f5](https://git.0xmax42.io/maxp/http-kernel/commit/1b447f51900b3a1a7f1be9d5192fd5aba37bdbc4))
+- *(ci)* Update deno tasks in CI workflow - ([38c00b0](https://git.0xmax42.io/maxp/http-kernel/commit/38c00b035bfd05c83d5898c97c9423a653db0840))
+- *(tasks)* Add benchmark, format, and lint commands - ([6e6e616](https://git.0xmax42.io/maxp/http-kernel/commit/6e6e61693fef3b11a81ce260d80bc93edae1e718))
 - *(workflows)* Consolidate and update CI configuration - ([ec1697d](https://git.0xmax42.io/maxp/http-kernel/commit/ec1697df94b5378f1766663e278a41d403a64336))
 - *(config)* Add exports field to module metadata - ([c28eb7f](https://git.0xmax42.io/maxp/http-kernel/commit/c28eb7f28dfaa8d3fdc540c4bcc306a3a8b9d6f8))
 - *(git)* Ignore merge conflicts for CHANGELOG.md - ([6399113](https://git.0xmax42.io/maxp/http-kernel/commit/6399113e122e1207ebf4113aebd250358e31f461))
