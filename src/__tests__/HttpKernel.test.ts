@@ -1,4 +1,7 @@
-import { assertEquals } from 'https://deno.land/std@0.204.0/assert/mod.ts';
+import {
+    assertEquals,
+    assertThrows,
+} from 'https://deno.land/std@0.204.0/assert/mod.ts';
 import { HttpKernel } from '../HttpKernel.ts';
 import type { IRouteDefinition } from '../Interfaces/mod.ts';
 
@@ -88,30 +91,32 @@ Deno.test('HttpKernel: middleware short-circuits pipeline', async () => {
     assertEquals(calls, ['mw1']);
 });
 
-Deno.test('HttpKernel: invalid middleware or handler signature triggers 500', async () => {
+Deno.test('HttpKernel: invalid middleware or handler signature throws at compile time', () => {
     const kernel = new HttpKernel();
 
     // Middleware with wrong signature (missing ctx, next)
-    kernel.route({ method: 'GET', path: '/bad-mw' })
-        // @ts-expect-error invalid middleware
-        .middleware(() => new Response('invalid'))
-        .handle((_ctx) => Promise.resolve(new Response('ok')));
-
-    const res1 = await kernel.handle(new Request('http://localhost/bad-mw'));
-    assertEquals(res1.status, 500);
-    assertEquals(await res1.text(), 'Internal Server Error');
+    assertThrows(
+        () => {
+            kernel.route({ method: 'GET', path: '/bad-mw' })
+                // @ts-expect-error invalid middleware
+                .middleware(() => new Response('invalid'))
+                .handle((_ctx) => Promise.resolve(new Response('ok')));
+        },
+        TypeError,
+        'Middleware at index 0 is not a valid function.',
+    );
 
     // Handler with wrong signature (no ctx)
-    kernel.route({ method: 'GET', path: '/bad-handler' })
-        .middleware(async (_ctx, next) => await next())
-        // @ts-expect-error invalid handler
-        .handle(() => new Response('invalid'));
-
-    const res2 = await kernel.handle(
-        new Request('http://localhost/bad-handler'),
+    assertThrows(
+        () => {
+            kernel.route({ method: 'GET', path: '/bad-handler' })
+                .middleware(async (_ctx, next) => await next())
+                // @ts-expect-error invalid handler
+                .handle(() => new Response('invalid'));
+        },
+        TypeError,
+        'Route handler must be a function returning a Promise<Response>.',
     );
-    assertEquals(res2.status, 500);
-    assertEquals(await res2.text(), 'Internal Server Error');
 });
 
 Deno.test('HttpKernel: 404 for unmatched route', async () => {
@@ -124,7 +129,7 @@ Deno.test('HttpKernel: skips route with wrong method', async () => {
     const kernel = new HttpKernel();
 
     kernel.route({ method: 'POST', path: '/only-post' })
-        .handle(() => Promise.resolve(new Response('nope')));
+        .handle((_ctx) => Promise.resolve(new Response('nope')));
 
     const res = await kernel.handle(
         new Request('http://localhost/only-post', { method: 'GET' }),
@@ -152,7 +157,7 @@ Deno.test('HttpKernel: handler throws → error propagates', async () => {
     const kernel = new HttpKernel();
 
     kernel.route({ method: 'GET', path: '/throw' })
-        .handle(() => {
+        .handle((_ctx) => {
             throw new Error('fail!');
         });
 
