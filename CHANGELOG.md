@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(workflows)* Remove redundant tag fallback in sync job - ([5686940](https://git.0xmax42.io/maxp/http-kernel/commit/5686940fe26b699bffa62af7fb0efc42cc85a6b3))
 
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Update release workflow for consistency - ([f177746](https://git.0xmax42.io/maxp/http-kernel/commit/f1777467607874f6bc83e1d7e37433298e25607c))
+
 ## [0.2.0](https://git.0xmax42.io/maxp/http-kernel/compare/v0.1.0..v0.2.0) - 2025-05-27
 
 ### 🚀 Features
