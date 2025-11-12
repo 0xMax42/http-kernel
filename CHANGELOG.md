@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.2.1](https://git.0xmax42.io/maxp/http-kernel/compare/v0.2.0..v0.2.1) - 2025-11-12
+
+### 🚀 Features
+
+- Export errors, interfaces, types, and utils from main module - ([6d7127a](https://git.0xmax42.io/maxp/http-kernel/commit/6d7127a52f4aecfd178523c8a873ab0b558550f1))
 
 ### 🐛 Bug Fixes
 
