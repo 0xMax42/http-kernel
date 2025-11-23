@@ -1,0 +1,126 @@
+name: Build Tags Export
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags list
+        run: |
+          git tag > tags.txt
+
+      - name: Prepare target directory
+        run: mkdir -p TARGET
+
+      - name: Checkout all tags and export
+        run: |
+          while read TAG; do
+            echo "Processing tag: $TAG"
+            mkdir -p "TARGET/$TAG"
+
+            # Sauber: Clonen aus dem lokalen Checkout
+            git clone . "workdir" --branch "$TAG" --depth 1
+
+            cp -a workdir/* "TARGET/$TAG/"
+            rm -rf workdir
+          done < tags.txt
+
+      - name: Upload as artifact (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: all-tags
+          path: TARGET/
+
+  publish-pages:
+    runs-on: ubuntu-latest
+    needs: build-tags
+
+    steps:
+      - name: Checkout Repository (for push setup)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: all-tags
+          path: TAGS_EXPORT
+
+      - name: Git Configure
+        run: |
+          git config --global user.name "$CI_COMMIT_AUTHOR_NAME"
+          git config --global user.email "$CI_COMMIT_AUTHOR_EMAIL"
+
+      - name: Check pages branch
+        id: check
+        run: |
+          if git ls-remote --exit-code origin pages > /dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Clone pages branch into repo/
+        run: |
+          REPO_URL_BASE="$(echo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git | sed 's/^https\?:\/\///')"
+          AUTH_URL="https://${{ secrets.PACKAGE_USER }}:${{ secrets.PACKAGE_TOKEN }}@$REPO_URL_BASE"
+
+          echo "::add-mask::$AUTH_URL"
+          echo "📡 Klone Repository von: $AUTH_URL"
+
+          if [ "${{ steps.check.outputs.exists }}" = "true" ]; then
+            git clone --depth 1 --branch pages "$AUTH_URL" repo
+          else
+            # Branch existiert nicht → ohne Branch klonen, später orphan erzeugen
+            git clone --depth 1 "$AUTH_URL" repo
+          fi
+
+      - name: Prepare pages branch
+        working-directory: repo
+        run: |
+          if [ "${{ steps.check.outputs.exists }}" = "true" ]; then
+            echo "📥 Checkout existing pages"
+            git checkout pages
+          else
+            echo "🌱 Create orphan"
+            git checkout --orphan pages
+            git reset --hard
+          fi
+
+          # Alles löschen für frischen Inhalt
+          rm -rf *
+
+      - name: Copy tag export
+        run: cp -a TAGS_EXPORT/* repo/
+
+      - name: Commit
+        working-directory: repo
+        run: |
+          git add -A
+          git commit --allow-empty -m "CI: Update Pages ($(date -u +"%Y-%m-%d %H:%M:%S"))" || echo "⚠️ Nothing to commit"
+
+      - name: Set new remote (auth)
+        working-directory: repo
+        run: |
+          REPO_URL_BASE="$(echo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git | sed 's/^https\?:\/\///')"
+          AUTH_URL="https://${{ secrets.PACKAGE_USER }}:${{ secrets.PACKAGE_TOKEN }}@$REPO_URL_BASE"
+          git remote set-url origin "$AUTH_URL"
+
+      - name: Push pages branch
+        working-directory: repo
+        run: |
+          if [ "${{ steps.check.outputs.exists }}" = "true" ]; then
+            echo "🚀 Normal push"
+            git push origin pages
+          else
+            echo "⛔ Force push orphan"
+            git push origin pages --force
+          fi
