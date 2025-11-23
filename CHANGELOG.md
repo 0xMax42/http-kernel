@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(ci)* Add workflow to export and publish tags to pages branch - ([410b17e](https://git.0xmax42.io/maxp/http-kernel/commit/410b17e494e84354478abd505c2d5e24328f3cde))
+
 ## [0.2.1](https://git.0xmax42.io/maxp/http-kernel/compare/v0.2.0..v0.2.1) - 2025-11-12
 
 ### 🚀 Features
