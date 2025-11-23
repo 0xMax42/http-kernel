@@ -1,0 +1,36 @@
+{
+    "name": "@0xmax42/http-kernel",
+    "description": "A simple HTTP kernel for Deno",
+    "exports": {
+        "./mod.ts": "./src/mod.ts"
+    },
+    "tasks": {
+        "test": "deno test --allow-net --allow-env --unstable-kv --allow-read --allow-write --coverage **/__tests__/*.test.ts",
+        "test:watch": "deno test --watch --allow-net --allow-env --unstable-kv --allow-read --allow-write **/__tests__/*.test.ts",
+        "benchmark": "deno bench --allow-net --allow-env --unstable-kv --allow-read --allow-write **/__bench__/*.bench.ts",
+        "fmt": "deno fmt --check",
+        "lint": "deno lint",
+        "ci": "deno task fmt && deno task lint && deno task test && deno task benchmark" // For local CI checks
+    },
+    "compilerOptions": {
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext",
+            "deno.ns"
+        ],
+        "strict": true
+    },
+    "fmt": {
+        "useTabs": false,
+        "lineWidth": 80,
+        "indentWidth": 4,
+        "semiColons": true,
+        "singleQuote": true,
+        "proseWrap": "preserve",
+        "include": [
+            "src/",
+            "main.ts"
+        ]
+    }
+}
